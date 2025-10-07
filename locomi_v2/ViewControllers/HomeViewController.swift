@@ -1,5 +1,5 @@
 //
-//  HomeScreenViewController.swift
+//  HomeViewController.swift
 //  locomi_v2
 //
 //  Created by Sogo Nishihara on 2025/10/07.
@@ -7,12 +7,12 @@
 
 import UIKit
 
-class HomeScreenViewController: UIViewController {
+class HomeViewController: UIViewController {
 
-    var homeScreen = HomeScreenView()
+    var homeView = HomeView()
 
     override func loadView() {
-        view = homeScreen
+        view = homeView
     }
 
     override func viewDidLoad() {

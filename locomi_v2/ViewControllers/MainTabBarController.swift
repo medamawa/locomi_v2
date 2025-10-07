@@ -7,23 +7,25 @@
 
 import UIKit
 
-class MainTabBarController: UIViewController {
+class MainTabBarController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        let homeVC = HomeViewController()
+        let profileVC = ProfileViewController()
+
+        // setting tab bar items
+        homeVC.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), tag: 0)
+        profileVC.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.circle"), tag: 1)
+
+        viewControllers = [
+            UINavigationController(rootViewController: homeVC),
+            UINavigationController(rootViewController: profileVC)
+        ]
+
+        tabBar.tintColor = .systemBlue
+        tabBar.isTranslucent = true
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
