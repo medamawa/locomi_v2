@@ -9,6 +9,8 @@ import UIKit
 
 class HomeViewController: UIViewController {
 
+    var coordinator: HomeCoordinator?
+
     var homeView = HomeView()
 
     override func loadView() {
