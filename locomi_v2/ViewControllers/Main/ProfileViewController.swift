@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseFirestore
 
 class ProfileViewController: UIViewController {
 
@@ -15,6 +16,7 @@ class ProfileViewController: UIViewController {
     var profileView = ProfileView()
 
     var currentUser = Auth.auth().currentUser!
+    var uid: String? = nil
 
     override func loadView() {
         view = profileView
@@ -25,9 +27,40 @@ class ProfileViewController: UIViewController {
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(didTapLogOut))
 
-        if let email = currentUser.email {
-            profileView.labelEmail.text = email
+        if (uid == nil) {
+            uid = currentUser.uid
         }
+        setupUserInfo(uid: self.uid!)
+    }
+
+    func setupUserInfo(uid: String) {
+        let db = Firestore.firestore()
+
+        db.collection("users")
+            .document(uid)
+            .getDocument { (document, error) in
+                if let error = error {
+                    print("Error fetching user: \(error.localizedDescription)")
+                    return
+                }
+
+                guard let document = document, document.exists else {
+                    print("User document does not exist")
+                    return
+                }
+
+                do {
+                    let user: User = try document.data(as: User.self)
+
+                    DispatchQueue.main.async {
+                        self.profileView.labelName.text = user.displayName
+                        self.profileView.labelEmail.text = user.email
+                    }
+
+                } catch {
+                    print("Error decoding user: \(error.localizedDescription)")
+                }
+            }
     }
 
     @objc func didTapLogOut() {

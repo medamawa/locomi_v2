@@ -29,15 +29,22 @@ extension SignUpViewController {
         guard let currentUser = Auth.auth().currentUser else { return } // TODO: Error handling
 
         let db = Firestore.firestore()
-        let userData: [String: Any] = [
-            "uid": currentUser.uid,
-            "name": name,
-            "email": email
-        ]
+        let collectionUsers = db.collection("users")
+        let user = User(uid: currentUser.uid, displayName: name, email: email, createdAt: Date())
 
-        db.collection("users")
-            .document(currentUser.uid)
-            .setData(userData)
+        do {
+            try collectionUsers
+                .document(currentUser.uid)
+                .setData(from: user) { error in
+                    if error == nil {
+                        // Success to store
+                    } else {
+                        print("Error saving user: \(error!.localizedDescription)")
+                    }
+                }
+        } catch {
+            print("Error encoding user: \(error.localizedDescription)")
+        }
     }
 
 }
