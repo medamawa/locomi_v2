@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import FirebaseAuth
 
 class SignUpViewController: UIViewController {
 
@@ -25,23 +24,11 @@ class SignUpViewController: UIViewController {
     }
 
     @objc func didTapSignUpButton() {
-        if let email = signUpView.textFieldEmail.text, !email.isEmpty,
+        if let name = signUpView.textFieldName.text, !name.isEmpty,
+           let email = signUpView.textFieldEmail.text, !email.isEmpty,
            let password = signUpView.textFieldPassword.text, !password.isEmpty {
-            createUser(email: email, password: password)
+            createUser(name: name, email: email, password: password)
         }
-    }
-
-    func createUser(email: String, password: String) {
-        // Create a Firebase user with email and password
-        Auth.auth().createUser(withEmail: email, password: password, completion: {result, error in
-            if error == nil {
-                // MARK: the user creation is successful
-
-            } else {
-                // MARK: there is an error creating the user
-                print("Error occured: \(String(describing: error))")
-            }
-        })
     }
 
 }

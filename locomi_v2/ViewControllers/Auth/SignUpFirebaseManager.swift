@@ -1,0 +1,43 @@
+//
+//  SignUpFirebaseManager.swift
+//  locomi_v2
+//
+//  Created by Sogo Nishihara on 2025/10/08.
+//
+
+import FirebaseAuth
+import FirebaseFirestore
+
+extension SignUpViewController {
+
+    // Create a Firebase user with email and password
+    func createUser(name: String, email: String, password: String) {
+        Auth.auth().createUser(withEmail: email, password: password, completion: {result, error in
+            if error == nil {
+                // MARK: the user creation is successful
+                self.saveUserToFirestore(name: name, email: email)
+
+            } else {
+                // MARK: there is an error creating the user
+                print("Error occured: \(String(describing: error))")
+            }
+        })
+    }
+
+    // Set the user information to Firestore after the account is created
+    func saveUserToFirestore(name: String, email: String) {
+        guard let currentUser = Auth.auth().currentUser else { return } // TODO: Error handling
+
+        let db = Firestore.firestore()
+        let userData: [String: Any] = [
+            "uid": currentUser.uid,
+            "name": name,
+            "email": email
+        ]
+
+        db.collection("users")
+            .document(currentUser.uid)
+            .setData(userData)
+    }
+
+}

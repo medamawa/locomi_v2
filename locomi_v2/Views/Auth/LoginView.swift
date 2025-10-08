@@ -31,59 +31,89 @@ class LoginView: UIView {
 
     func setupLabelTitle() {
         labelTitle = UILabel()
-        labelTitle.text = "Sign in"
-        labelTitle.font = .boldSystemFont(ofSize: 48)
+
+        labelTitle.text = "Welcome Back"
+        labelTitle.font = .systemFont(ofSize: 32, weight: .bold)
+        labelTitle.textAlignment = .center
+
         labelTitle.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(labelTitle)
     }
     func setupTextFieldEmail() {
         textFieldEmail = UITextField()
+
         textFieldEmail.placeholder = "Email"
+        textFieldEmail.font = .systemFont(ofSize: 16)
+        textFieldEmail.borderStyle = .roundedRect
+
         textFieldEmail.textContentType = .emailAddress
         textFieldEmail.keyboardType = .emailAddress
-        textFieldEmail.borderStyle = .roundedRect
+        textFieldEmail.autocapitalizationType = .none
+        textFieldEmail.autocorrectionType = .no
+        textFieldEmail.returnKeyType = .next
+        textFieldEmail.clearButtonMode = .whileEditing
+
         textFieldEmail.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(textFieldEmail)
     }
     func setupTextFieldPassword() {
         textFieldPassword = UITextField()
+
         textFieldPassword.placeholder = "Password"
+        textFieldPassword.font = .systemFont(ofSize: 16)
+        textFieldPassword.borderStyle = .roundedRect
+
         textFieldPassword.textContentType = .password
         textFieldPassword.isSecureTextEntry = true
-        textFieldPassword.borderStyle = .roundedRect
+        textFieldPassword.returnKeyType = .done
+        textFieldPassword.clearButtonMode = .whileEditing
+
         textFieldPassword.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(textFieldPassword)
     }
     func setupButtonLogin() {
         buttonLogin = UIButton(type: .system)
+
         buttonLogin.setTitle("Log in", for: .normal)
+        buttonLogin.titleLabel?.font = .systemFont(ofSize: 18, weight: .semibold)
+        buttonLogin.backgroundColor = .systemBlue
+        buttonLogin.setTitleColor(.white, for: .normal)
+        buttonLogin.layer.cornerRadius = 12
+
         buttonLogin.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(buttonLogin)
     }
     func setupButtonSignUp() {
         buttonSignUp = UIButton(type: .system)
-        buttonSignUp.setTitle("Create a new account?", for: .normal)
+
+        buttonSignUp.setTitle("Don't have an account? Sign Up", for: .normal)
+        buttonSignUp.titleLabel?.font = .systemFont(ofSize: 15)
+
         buttonSignUp.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(buttonSignUp)
     }
 
     func initConstraints() {
         NSLayoutConstraint.activate([
-            labelTitle.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.centerYAnchor, constant: -256),
+            labelTitle.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 80),
             labelTitle.centerXAnchor.constraint(equalTo: self.safeAreaLayoutGuide.centerXAnchor),
 
-            textFieldEmail.topAnchor.constraint(equalTo: labelTitle.bottomAnchor, constant: 24),
-            textFieldEmail.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 32),
-            textFieldEmail.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -32),
+            textFieldEmail.topAnchor.constraint(equalTo: labelTitle.bottomAnchor, constant: 60),
+            textFieldEmail.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 24),
+            textFieldEmail.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -24),
+            textFieldEmail.heightAnchor.constraint(equalToConstant: 50),
 
-            textFieldPassword.topAnchor.constraint(equalTo: textFieldEmail.bottomAnchor, constant: 12),
+            textFieldPassword.topAnchor.constraint(equalTo: textFieldEmail.bottomAnchor, constant: 16),
             textFieldPassword.leadingAnchor.constraint(equalTo: textFieldEmail.leadingAnchor),
             textFieldPassword.trailingAnchor.constraint(equalTo: textFieldEmail.trailingAnchor),
+            textFieldPassword.heightAnchor.constraint(equalToConstant: 50),
 
-            buttonLogin.topAnchor.constraint(equalTo: textFieldPassword.bottomAnchor, constant: 24),
-            buttonLogin.centerXAnchor.constraint(equalTo: self.safeAreaLayoutGuide.centerXAnchor),
+            buttonLogin.topAnchor.constraint(equalTo: textFieldPassword.bottomAnchor, constant: 32),
+            buttonLogin.leadingAnchor.constraint(equalTo: textFieldEmail.leadingAnchor),
+            buttonLogin.trailingAnchor.constraint(equalTo: textFieldEmail.trailingAnchor),
+            buttonLogin.heightAnchor.constraint(equalToConstant: 50),
 
-            buttonSignUp.topAnchor.constraint(equalTo: buttonLogin.bottomAnchor, constant: 12),
+            buttonSignUp.topAnchor.constraint(equalTo: buttonLogin.bottomAnchor, constant: 20),
             buttonSignUp.centerXAnchor.constraint(equalTo: self.safeAreaLayoutGuide.centerXAnchor)
         ])
     }
