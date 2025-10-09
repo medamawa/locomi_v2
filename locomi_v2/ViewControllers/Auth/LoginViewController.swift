@@ -23,6 +23,11 @@ class LoginViewController: UIViewController {
 
         loginView.buttonLogin.addTarget(self, action: #selector(didTapLoginButton), for: .touchUpInside)
         loginView.buttonSignUp.addTarget(self, action: #selector(didTapSignUpButton), for: .touchUpInside)
+
+        // Dismiss keyboard when tap outside
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        loginView.addGestureRecognizer(tapGesture)
     }
 
     @objc func didTapLoginButton() {
@@ -47,6 +52,10 @@ class LoginViewController: UIViewController {
                 print("Error occured: \(String(describing: error))")
             }
         })
+    }
+
+    @objc func dismissKeyboard() {
+        loginView.endEditing(true)
     }
 
 }

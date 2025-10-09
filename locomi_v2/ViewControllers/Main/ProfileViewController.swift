@@ -25,7 +25,7 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(didTapLogOut))
+        profileView.buttonLogout.addTarget(self, action: #selector(didTapLogOut), for: .touchUpInside)
 
         if (uid == nil) {
             uid = currentUser.uid
@@ -54,7 +54,11 @@ class ProfileViewController: UIViewController {
 
                     DispatchQueue.main.async {
                         self.profileView.labelName.text = user.displayName
-                        self.profileView.labelEmail.text = user.email
+                        self.profileView.labelUsername.text = "@\(user.username)"
+                        self.profileView.labelBio.text = user.bio ?? "I'm nothing... :|"
+                        self.profileView.labelPostsCount.text = "\(user.postsCount)"
+                        self.profileView.labelFollowersCount.text = "\(user.followersCount)"
+                        self.profileView.labelFollowingCount.text = "\(user.followingCount)"
                     }
 
                 } catch {

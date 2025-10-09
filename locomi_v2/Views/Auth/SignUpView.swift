@@ -9,10 +9,16 @@ import UIKit
 
 class SignUpView: UIView {
 
+    var scrollView: UIScrollView!
+    var contentView: UIView!
+
     var labelTitle: UILabel!
-    var textFieldName: UITextField!
+    var textFieldDisplayName: UITextField!
+    var textFieldUsername: UITextField!
     var textFieldEmail: UITextField!
     var textFieldPassword: UITextField!
+    var textViewBio: UITextView!
+    var labelBioPlaceholder: UILabel!
     var buttonSignUp: UIButton!
 
 
@@ -20,15 +26,30 @@ class SignUpView: UIView {
         super.init(frame: frame)
         self.backgroundColor = .systemBackground
 
+        setupScrollView()
         setupLabelTitle()
-        setupTextFieldName()
+        setupTextFieldDisplayName()
+        setupTextFieldUsername()
         setupTextFieldEmail()
         setupTextFieldPassword()
+        setupTextViewBio()
         setupButtonSignUp()
 
         initConstraints()
     }
 
+    func setupScrollView() {
+        scrollView = UIScrollView()
+
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(scrollView)
+
+
+        contentView = UIView()
+
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(contentView)
+    }
     func setupLabelTitle() {
         labelTitle = UILabel()
 
@@ -37,22 +58,37 @@ class SignUpView: UIView {
         labelTitle.textAlignment = .center
 
         labelTitle.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(labelTitle)
+        contentView.addSubview(labelTitle)
     }
-    func setupTextFieldName() {
-        textFieldName = UITextField()
-        textFieldName.placeholder = "Name"
-        textFieldName.font = .systemFont(ofSize: 16)
-        textFieldName.borderStyle = .roundedRect
+    func setupTextFieldDisplayName() {
+        textFieldDisplayName = UITextField()
+        textFieldDisplayName.placeholder = "Name"
+        textFieldDisplayName.font = .systemFont(ofSize: 16)
+        textFieldDisplayName.borderStyle = .roundedRect
 
-        textFieldName.textContentType = .name
-        textFieldName.autocapitalizationType = .words
-        textFieldName.autocorrectionType = .no
-        textFieldName.returnKeyType = .next
-        textFieldName.clearButtonMode = .whileEditing
+        textFieldDisplayName.textContentType = .name
+        textFieldDisplayName.autocapitalizationType = .none
+        textFieldDisplayName.autocorrectionType = .no
+        textFieldDisplayName.returnKeyType = .next
+        textFieldDisplayName.clearButtonMode = .whileEditing
 
-        textFieldName.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(textFieldName)
+        textFieldDisplayName.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(textFieldDisplayName)
+    }
+    func setupTextFieldUsername() {
+        textFieldUsername = UITextField()
+        textFieldUsername.placeholder = "Username (@username)"
+        textFieldUsername.font = .systemFont(ofSize: 16)
+        textFieldUsername.borderStyle = .roundedRect
+
+        textFieldUsername.textContentType = .username
+        textFieldUsername.autocapitalizationType = .none
+        textFieldUsername.autocorrectionType = .no
+        textFieldUsername.returnKeyType = .next
+        textFieldUsername.clearButtonMode = .whileEditing
+
+        textFieldUsername.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(textFieldUsername)
     }
     func setupTextFieldEmail() {
         textFieldEmail = UITextField()
@@ -69,7 +105,7 @@ class SignUpView: UIView {
         textFieldEmail.clearButtonMode = .whileEditing
 
         textFieldEmail.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(textFieldEmail)
+        contentView.addSubview(textFieldEmail)
     }
     func setupTextFieldPassword() {
         textFieldPassword = UITextField()
@@ -84,7 +120,31 @@ class SignUpView: UIView {
         textFieldPassword.clearButtonMode = .whileEditing
 
         textFieldPassword.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(textFieldPassword)
+        contentView.addSubview(textFieldPassword)
+    }
+    func setupTextViewBio() {
+        textViewBio = UITextView()
+
+        textViewBio.font = .systemFont(ofSize: 16)
+        textViewBio.layer.borderColor = UIColor.systemGray4.cgColor
+        textViewBio.layer.borderWidth = 1
+        textViewBio.layer.cornerRadius = 8
+
+        textViewBio.textContainerInset = UIEdgeInsets(top: 12, left: 8, bottom: 12, right: 8)
+        textViewBio.isScrollEnabled = true
+
+        textViewBio.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(textViewBio)
+
+
+        labelBioPlaceholder = UILabel()
+
+        labelBioPlaceholder.text = "Bio (optional)"
+        labelBioPlaceholder.font = .systemFont(ofSize: 16)
+        labelBioPlaceholder.textColor = .placeholderText
+
+        labelBioPlaceholder.translatesAutoresizingMaskIntoConstraints = false
+        textViewBio.addSubview(labelBioPlaceholder)
     }
     func setupButtonSignUp() {
         buttonSignUp = UIButton(type: .system)
@@ -101,33 +161,67 @@ class SignUpView: UIView {
 
     func initConstraints() {
         NSLayoutConstraint.activate([
-            labelTitle.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 80),
-            labelTitle.centerXAnchor.constraint(equalTo: self.safeAreaLayoutGuide.centerXAnchor),
+            // ScrollView constraints
+            scrollView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
 
-            textFieldName.topAnchor.constraint(equalTo: labelTitle.bottomAnchor, constant: 60),
-            textFieldName.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 24),
-            textFieldName.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -24),
-            textFieldName.heightAnchor.constraint(equalToConstant: 50),
+            // ContentView constraints
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
 
-            textFieldEmail.topAnchor.constraint(equalTo: textFieldName.bottomAnchor, constant: 16),
-            textFieldEmail.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 24),
-            textFieldEmail.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -24),
+            // Title
+            labelTitle.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 60),
+            labelTitle.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+
+            // Display Name
+            textFieldDisplayName.topAnchor.constraint(equalTo: labelTitle.bottomAnchor, constant: 40),
+            textFieldDisplayName.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
+            textFieldDisplayName.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            textFieldDisplayName.heightAnchor.constraint(equalToConstant: 50),
+
+            // Username
+            textFieldUsername.topAnchor.constraint(equalTo: textFieldDisplayName.bottomAnchor, constant: 16),
+            textFieldUsername.leadingAnchor.constraint(equalTo: textFieldDisplayName.leadingAnchor),
+            textFieldUsername.trailingAnchor.constraint(equalTo: textFieldDisplayName.trailingAnchor),
+            textFieldUsername.heightAnchor.constraint(equalToConstant: 50),
+
+            // Email
+            textFieldEmail.topAnchor.constraint(equalTo: textFieldUsername.bottomAnchor, constant: 16),
+            textFieldEmail.leadingAnchor.constraint(equalTo: textFieldDisplayName.leadingAnchor),
+            textFieldEmail.trailingAnchor.constraint(equalTo: textFieldDisplayName.trailingAnchor),
             textFieldEmail.heightAnchor.constraint(equalToConstant: 50),
 
+            // Password
             textFieldPassword.topAnchor.constraint(equalTo: textFieldEmail.bottomAnchor, constant: 16),
-            textFieldPassword.leadingAnchor.constraint(equalTo: textFieldEmail.leadingAnchor),
-            textFieldPassword.trailingAnchor.constraint(equalTo: textFieldEmail.trailingAnchor),
+            textFieldPassword.leadingAnchor.constraint(equalTo: textFieldDisplayName.leadingAnchor),
+            textFieldPassword.trailingAnchor.constraint(equalTo: textFieldDisplayName.trailingAnchor),
             textFieldPassword.heightAnchor.constraint(equalToConstant: 50),
 
-            buttonSignUp.topAnchor.constraint(equalTo: textFieldPassword.bottomAnchor, constant: 32),
-            buttonSignUp.leadingAnchor.constraint(equalTo: textFieldEmail.leadingAnchor),
-            buttonSignUp.trailingAnchor.constraint(equalTo: textFieldEmail.trailingAnchor),
-            buttonSignUp.heightAnchor.constraint(equalToConstant: 50)
+            // Bio TextView
+            textViewBio.topAnchor.constraint(equalTo: textFieldPassword.bottomAnchor, constant: 16),
+            textViewBio.leadingAnchor.constraint(equalTo: textFieldDisplayName.leadingAnchor),
+            textViewBio.trailingAnchor.constraint(equalTo: textFieldDisplayName.trailingAnchor),
+            textViewBio.heightAnchor.constraint(equalToConstant: 100),
+
+            // Bio Placeholder
+            labelBioPlaceholder.topAnchor.constraint(equalTo: textViewBio.topAnchor, constant: 12),
+            labelBioPlaceholder.leadingAnchor.constraint(equalTo: textViewBio.leadingAnchor, constant: 12),
+
+            // Sign Up Button
+            buttonSignUp.topAnchor.constraint(equalTo: textViewBio.bottomAnchor, constant: 32),
+            buttonSignUp.leadingAnchor.constraint(equalTo: textFieldDisplayName.leadingAnchor),
+            buttonSignUp.trailingAnchor.constraint(equalTo: textFieldDisplayName.trailingAnchor),
+            buttonSignUp.heightAnchor.constraint(equalToConstant: 50),
+            buttonSignUp.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -40)
         ])
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }
