@@ -33,13 +33,51 @@ class SignUpViewController: UIViewController {
     }
 
     @objc func didTapSignUpButton() {
-        if let displayName = signUpView.textFieldDisplayName.text, !displayName.isEmpty,
-           let username = signUpView.textFieldUsername.text, !displayName.isEmpty,
-           let email = signUpView.textFieldEmail.text, !email.isEmpty,
-           let password = signUpView.textFieldPassword.text, !password.isEmpty,
-           let bio = signUpView.textViewBio.text {
-            createUser(displayName: displayName, username: username, email: email, password: password, bio: bio)
+        guard let displayName = signUpView.textFieldDisplayName.text?.trimmed,
+              let username = signUpView.textFieldUsername.text?.trimmed,
+              let email = signUpView.textFieldEmail.text?.trimmed,
+              let password = signUpView.textFieldPassword.text,
+              let bio = signUpView.textViewBio.text else {
+            showErrorAlert(message: "Please fill in all required fields")
+            return
         }
+
+        if displayName.isBlank {
+             showErrorAlert(message: "Display name cannot be empty")
+             return
+         }
+        
+         if username.isBlank {
+             showErrorAlert(message: "Username cannot be empty")
+             return
+         }
+
+        if !username.isValidUsername {
+            showErrorAlert(message: "Username must be at least 3 characters and contain only letters, numbers, and underscores")
+            return
+        }
+
+         if email.isBlank {
+             showErrorAlert(message: "Email cannot be empty")
+             return
+         }
+
+        if !email.isValidEmail {
+            showErrorAlert(message: "Please enter a valid email address")
+            return
+        }
+
+         if password.isBlank {
+             showErrorAlert(message: "Password cannot be empty")
+             return
+         }
+
+        if !password.isValidPassword {
+            showErrorAlert(message: "PPassword must be at least 8 characters long and contain uppercase letters, lowercase letters, and numbers")
+            return
+        }
+
+        createUser(displayName: displayName, username: username, email: email, password: password, bio: bio)
     }
 
     @objc func keyboardWillShow(notification: NSNotification) {

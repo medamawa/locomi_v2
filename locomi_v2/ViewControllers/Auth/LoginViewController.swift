@@ -31,10 +31,33 @@ class LoginViewController: UIViewController {
     }
 
     @objc func didTapLoginButton() {
-        if let uwEmail = loginView.textFieldEmail.text, !uwEmail.isEmpty,
-           let uwPassword = loginView.textFieldPassword.text, !uwPassword.isEmpty {
-            signInToFireBase(email: uwEmail, password: uwPassword)
+        guard let email = loginView.textFieldEmail.text?.trimmed,
+              let password = loginView.textFieldPassword.text else {
+            showErrorAlert(message: "Please fill in all required fields")
+            return
         }
+
+         if email.isBlank {
+             showErrorAlert(message: "Email cannot be empty")
+             return
+         }
+
+        if !email.isValidEmail {
+            showErrorAlert(message: "Please enter a valid email address")
+            return
+        }
+
+         if password.isBlank {
+             showErrorAlert(message: "Password cannot be empty")
+             return
+         }
+
+        if !password.isValidPassword {
+            showErrorAlert(message: "Incorrect password")
+            return
+        }
+
+        signInToFireBase(email: email, password: password)
     }
 
     @objc func didTapSignUpButton() {
@@ -48,8 +71,8 @@ class LoginViewController: UIViewController {
                 self.coordinator?.didFinishAuth()
 
             } else {
-                // TODO: Show alert
-                print("Error occured: \(String(describing: error))")
+                let errorInfo = error!.firebaseAuthErrorInfo
+                self.showErrorAlert(title: errorInfo.title, message: errorInfo.message)
             }
         })
     }

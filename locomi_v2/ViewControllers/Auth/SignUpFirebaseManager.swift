@@ -20,7 +20,8 @@ extension SignUpViewController {
 
             } else {
                 // MARK: there is an error creating the user
-                print("Error occured: \(String(describing: error))")
+                let errorInfo = error!.firebaseAuthErrorInfo
+                self.showErrorAlert(title: errorInfo.title, message: errorInfo.message)
             }
         })
     }
@@ -37,11 +38,12 @@ extension SignUpViewController {
                     if error == nil {
                         // Success to store
                     } else {
-                        print("Error saving user: \(error!.localizedDescription)")
+                        let errorInfo = error!.firestoreErrorInfo
+                        self.showErrorAlert(title: errorInfo.title, message: errorInfo.message)
                     }
                 }
         } catch {
-            print("Error encoding user: \(error.localizedDescription)")
+            self.showErrorAlert(title: "Error encoding user", message: error.localizedDescription)
         }
     }
 
