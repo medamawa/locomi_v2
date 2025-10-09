@@ -76,9 +76,12 @@ class LoginView: UIView {
 
         buttonLogin.setTitle("Log in", for: .normal)
         buttonLogin.titleLabel?.font = .systemFont(ofSize: 18, weight: .semibold)
-        buttonLogin.backgroundColor = .systemBlue
+        buttonLogin.backgroundColor = .systemGray2
+        buttonLogin.alpha = 0.5
         buttonLogin.setTitleColor(.white, for: .normal)
         buttonLogin.layer.cornerRadius = 12
+
+        buttonLogin.isEnabled = false
 
         buttonLogin.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(buttonLogin)

@@ -18,7 +18,6 @@ class SignUpView: UIView {
     var textFieldEmail: UITextField!
     var textFieldPassword: UITextField!
     var textViewBio: UITextView!
-    var labelBioPlaceholder: UILabel!
     var buttonSignUp: UIButton!
 
 
@@ -125,6 +124,7 @@ class SignUpView: UIView {
     func setupTextViewBio() {
         textViewBio = UITextView()
 
+        textViewBio.placeholder = "Bio (optional)"
         textViewBio.font = .systemFont(ofSize: 16)
         textViewBio.layer.borderColor = UIColor.systemGray4.cgColor
         textViewBio.layer.borderWidth = 1
@@ -135,25 +135,18 @@ class SignUpView: UIView {
 
         textViewBio.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(textViewBio)
-
-
-        labelBioPlaceholder = UILabel()
-
-        labelBioPlaceholder.text = "Bio (optional)"
-        labelBioPlaceholder.font = .systemFont(ofSize: 16)
-        labelBioPlaceholder.textColor = .placeholderText
-
-        labelBioPlaceholder.translatesAutoresizingMaskIntoConstraints = false
-        textViewBio.addSubview(labelBioPlaceholder)
     }
     func setupButtonSignUp() {
         buttonSignUp = UIButton(type: .system)
 
         buttonSignUp.setTitle("Sign up", for: .normal)
         buttonSignUp.titleLabel?.font = .systemFont(ofSize: 18, weight: .semibold)
-        buttonSignUp.backgroundColor = .systemBlue
+        buttonSignUp.backgroundColor = .systemGray2
+        buttonSignUp.alpha = 0.5
         buttonSignUp.setTitleColor(.white, for: .normal)
         buttonSignUp.layer.cornerRadius = 12
+
+        buttonSignUp.isEnabled = false
 
         buttonSignUp.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(buttonSignUp)
@@ -207,10 +200,6 @@ class SignUpView: UIView {
             textViewBio.leadingAnchor.constraint(equalTo: textFieldDisplayName.leadingAnchor),
             textViewBio.trailingAnchor.constraint(equalTo: textFieldDisplayName.trailingAnchor),
             textViewBio.heightAnchor.constraint(equalToConstant: 100),
-
-            // Bio Placeholder
-            labelBioPlaceholder.topAnchor.constraint(equalTo: textViewBio.topAnchor, constant: 12),
-            labelBioPlaceholder.leadingAnchor.constraint(equalTo: textViewBio.leadingAnchor, constant: 12),
 
             // Sign Up Button
             buttonSignUp.topAnchor.constraint(equalTo: textViewBio.bottomAnchor, constant: 32),

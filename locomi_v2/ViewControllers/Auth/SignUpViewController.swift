@@ -30,6 +30,13 @@ class SignUpViewController: UIViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGesture.cancelsTouchesInView = false
         signUpView.addGestureRecognizer(tapGesture)
+
+        // Enable/disable login button based on text fields have text or not
+        signUpView.textFieldDisplayName.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        signUpView.textFieldUsername.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        signUpView.textFieldEmail.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        signUpView.textFieldPassword.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+
     }
 
     @objc func didTapSignUpButton() {
@@ -80,6 +87,16 @@ class SignUpViewController: UIViewController {
         createUser(displayName: displayName, username: username, email: email, password: password, bio: bio)
     }
 
+    @objc func textFieldDidChange() {
+        let hasInput = !signUpView.textFieldDisplayName.text!.isEmpty && !signUpView.textFieldUsername.text!.isEmpty && !signUpView.textFieldEmail.text!.isEmpty && !signUpView.textFieldPassword.text!.isEmpty
+
+        if (hasInput){
+            signUpView.buttonSignUp.updateEnabledStateAnimated(isEnabled: true)
+        } else {
+            signUpView.buttonSignUp.updateEnabledStateAnimated(isEnabled: false)
+        }
+    }
+
     @objc func keyboardWillShow(notification: NSNotification) {
         guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
         let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardFrame.height, right: 0)
@@ -90,10 +107,6 @@ class SignUpViewController: UIViewController {
     @objc func keyboardWillHide(notification: NSNotification) {
         signUpView.scrollView.contentInset = .zero
         signUpView.scrollView.scrollIndicatorInsets = .zero
-    }
-
-    @objc func dismissKeyboard() {
-        signUpView.endEditing(true)
     }
 
 }
