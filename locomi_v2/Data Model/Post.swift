@@ -7,6 +7,7 @@
 
 import FirebaseFirestore
 import CoreLocation
+import MapKit
 
 struct Post: Codable {
     @DocumentID var id: String?
@@ -67,5 +68,4 @@ struct Post: Codable {
         return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
     }
 
-    
 }

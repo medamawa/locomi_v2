@@ -22,19 +22,19 @@ class MainCoordinator: Coordinator {
         let tabBarController = MainTabBarController()
         self.tabBarController = tabBarController
 
-        let homeCoordinator = HomeCoordinator()
+        let mapCoordinator = MapCoordinator()
         let profileCoordinator = ProfileCoordinator()
 
         childCoordinators = [
-            homeCoordinator,
+            mapCoordinator,
             profileCoordinator
         ]
 
-        homeCoordinator.start()
+        mapCoordinator.start()
         profileCoordinator.start()
 
         tabBarController.viewControllers = [
-            homeCoordinator.navigationController,
+            mapCoordinator.navigationController,
             profileCoordinator.navigationController
         ]
 

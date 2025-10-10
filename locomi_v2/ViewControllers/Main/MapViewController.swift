@@ -1,5 +1,5 @@
 //
-//  HomeViewController.swift
+//  MapViewController.swift
 //  locomi_v2
 //
 //  Created by Sogo Nishihara on 2025/10/07.
@@ -7,14 +7,14 @@
 
 import UIKit
 
-class HomeViewController: UIViewController {
+class MapViewController: UIViewController {
 
-    var coordinator: HomeCoordinator?
+    var coordinator: MapCoordinator?
 
-    var homeView = HomeView()
+    var mapView = MapView()
 
     override func loadView() {
-        view = homeView
+        view = mapView
     }
 
     override func viewDidLoad() {
