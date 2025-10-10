@@ -13,7 +13,7 @@ class ProfileCoordinator: Coordinator {
 
     init() {
         self.navigationController = UINavigationController()
-        self.navigationController.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.circle"), tag: 1)
+        self.navigationController.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.circle"), tag: 2)
     }
 
     func start() {
