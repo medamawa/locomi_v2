@@ -22,4 +22,15 @@ class MapCoordinator: Coordinator {
         mapVC.coordinator = self
         navigationController.setViewControllers([mapVC], animated: true)
     }
+
+    func showAddPost() {
+        let addPostVC = AddPostViewController()
+
+        addPostVC.coordinator = self
+
+        let nav = UINavigationController(rootViewController: addPostVC)
+        nav.modalTransitionStyle = .coverVertical
+        nav.modalPresentationStyle = .fullScreen
+        navigationController.present(nav, animated: true)
+    }
 }

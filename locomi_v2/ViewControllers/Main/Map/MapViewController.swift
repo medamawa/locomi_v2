@@ -24,10 +24,14 @@ class MapViewController: UIViewController {
 
         mapView.mapView.delegate = self
 
+        mapView.buttonAddPost.addTarget(self, action: #selector(didButtonAddPostTapped), for: .touchUpInside)
+
         loadPosts()
     }
 
-
+    @objc func didButtonAddPostTapped() {
+        coordinator?.showAddPost()
+    }
 
     private func loadPosts() {
 
