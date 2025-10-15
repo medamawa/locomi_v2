@@ -13,6 +13,8 @@ class PostAnnotation: NSObject, MKAnnotation {
     var subtitle: String?
 
     let post: Post
+    
+    var isSelected: Bool = false
 
     init(post: Post) {
         self.post = post
