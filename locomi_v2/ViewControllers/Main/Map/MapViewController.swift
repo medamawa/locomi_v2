@@ -12,6 +12,8 @@ class MapViewController: UIViewController {
 
     var coordinator: MapCoordinator?
 
+    let locationManager = LocationManager()
+
     var mapView = MapView()
     private var posts: [Post] = []
 
@@ -23,22 +25,42 @@ class MapViewController: UIViewController {
         super.viewDidLoad()
 
         mapView.mapView.delegate = self
+        locationManager.configure(presentingViewController: self)
 
         mapView.buttonAddPost.addTarget(self, action: #selector(didButtonAddPostTapped), for: .touchUpInside)
+        mapView.buttonCurrentLocation.addTarget(self, action: #selector(didButtonCurrentLocationTapped), for: .touchUpInside)
 
         loadPosts()
+        locationManager.fetchCurrentLocation { currentLocation in
+
+            guard let currentLocation = currentLocation else {
+                self.mapView.mapView.centerToLocation(location: CLLocation(latitude: 0, longitude: 0))
+                return
+            }
+
+            self.mapView.mapView.centerToLocation(location: currentLocation)
+        }
     }
 
     @objc func didButtonAddPostTapped() {
         coordinator?.showAddPost()
     }
 
+    @objc func didButtonCurrentLocationTapped() {
+
+        locationManager.fetchCurrentLocation { currentLocation in
+            guard let currentLocation = currentLocation else { return }
+
+            self.mapView.mapView.centerToLocation(location: currentLocation)
+        }
+    }
+
     private func loadPosts() {
 
         // TODO: load posts from firestore
         let samplePosts = [
-            Post(uid: "user1", content: "beautiful", latitude: 35.6812, longitute: 139.7671, locationName: "Tokyo station"),
-            Post(uid: "user2", content: "nice cafe, tatte", latitude: 35.6586, longitute: 139.7454, locationName: "Tokyo tower")
+            Post(uid: "swimmer", content: "the water is frozen", latitude: 42.353234, longitute: -71.069477, locationName: "pond"),
+            Post(uid: "duck", content: "GET OUT OF MY WAY!!", latitude: 42.355502, longitute: -71.069798, locationName: "bronze ducks")
         ]
 
         displayPosts(samplePosts)
@@ -52,16 +74,7 @@ class MapViewController: UIViewController {
         let annotations = posts.compactMap { PostAnnotation(post: $0) }
         mapView.mapView.addAnnotations(annotations)
 
-        // adjust map range
-        if let firstPost = posts.first {
-            let region = MKCoordinateRegion(
-                center: firstPost.coordinate,
-                span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
-            )
-            mapView.mapView.setRegion(region, animated: true)
-        }
     }
-
 
 }
 

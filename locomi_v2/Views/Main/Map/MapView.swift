@@ -11,6 +11,7 @@ import MapKit
 class MapView: UIView {
 
     var mapView: MKMapView!
+    var buttonCurrentLocation: UIButton!
     var buttonAddPost: UIButton!
 
     override init(frame: CGRect) {
@@ -18,6 +19,7 @@ class MapView: UIView {
         self.backgroundColor = .systemBackground
 
         setupMapView()
+        setupButtonCurrentLocation()
         setupButtonAddPost()
 
         initConstraints()
@@ -37,8 +39,26 @@ class MapView: UIView {
         mapView.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(mapView)
     }
+    func setupButtonCurrentLocation() {
+        buttonCurrentLocation = UIButton(type: .system)
+
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 24, weight: .semibold)
+        buttonCurrentLocation.setImage(UIImage(systemName: "location.circle", withConfiguration: imageConfig), for: .normal)
+        buttonCurrentLocation.backgroundColor = .systemBlue
+        buttonCurrentLocation.tintColor = .white
+        buttonCurrentLocation.layer.cornerRadius = 24
+
+        buttonCurrentLocation.layer.shadowColor = UIColor.black.cgColor
+        buttonCurrentLocation.layer.shadowOffset = CGSize(width: 0, height: 2)
+        buttonCurrentLocation.layer.shadowRadius = 4
+        buttonCurrentLocation.layer.shadowOpacity = 0.3
+
+        buttonCurrentLocation.translatesAutoresizingMaskIntoConstraints = false
+
+        self.addSubview(buttonCurrentLocation)
+    }
     func setupButtonAddPost() {
-        buttonAddPost = UIButton()
+        buttonAddPost = UIButton(type: .system)
 
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 24, weight: .semibold)
         buttonAddPost.setImage(UIImage(systemName: "plus", withConfiguration: imageConfig), for: .normal)
@@ -65,7 +85,13 @@ class MapView: UIView {
             buttonAddPost.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             buttonAddPost.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -16),
             buttonAddPost.widthAnchor.constraint(equalToConstant: 56),
-            buttonAddPost.heightAnchor.constraint(equalToConstant: 56)
+            buttonAddPost.heightAnchor.constraint(equalToConstant: 56),
+
+            buttonCurrentLocation.trailingAnchor.constraint(equalTo: buttonAddPost.trailingAnchor),
+            buttonCurrentLocation.bottomAnchor.constraint(equalTo: buttonAddPost.topAnchor, constant: -16),
+            buttonCurrentLocation.widthAnchor.constraint(equalTo: buttonAddPost.widthAnchor),
+            buttonCurrentLocation.heightAnchor.constraint(equalTo: buttonAddPost.heightAnchor)
+
         ])
     }
 
