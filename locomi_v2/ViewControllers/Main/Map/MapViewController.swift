@@ -75,13 +75,19 @@ class MapViewController: UIViewController {
 
     private func loadPosts() {
 
-        // TODO: load posts from firestore
-        let samplePosts = [
-            Post(uid: "swimmer", content: "the water is frozen", latitude: 42.353234, longitute: -71.069477, locationName: "pond"),
-            Post(uid: "duck", content: "GET OUT OF MY WAY!!", latitude: 42.355502, longitute: -71.069798, locationName: "bronze ducks")
-        ]
+        FirestoreManager.shared.getAllPosts { posts, error in
+            DispatchQueue.main.async {
+                if let error = error {
+                    self.showErrorAlert(title: "Failed to fetch posts", message: error.localizedDescription)
+                    return
+                }
 
-        displayPosts(samplePosts)
+                guard let posts = posts else { return }
+
+                self.displayPosts(posts)
+            }
+        }
+
     }
 
     func displayPosts(_ posts: [Post]) {
