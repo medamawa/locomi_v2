@@ -9,8 +9,6 @@ import MapKit
 
 class PostAnnotation: NSObject, MKAnnotation {
     var coordinate: CLLocationCoordinate2D
-    var title: String?
-    var subtitle: String?
 
     let post: Post
     
@@ -20,13 +18,6 @@ class PostAnnotation: NSObject, MKAnnotation {
         self.post = post
 
         self.coordinate = post.coordinate
-        self.title = post.locationName ?? "Post"
-
-        if post.content.count > 20 {
-            self.subtitle = String(post.content.prefix(20)) + "..."
-        } else {
-            self.subtitle = post.content
-        }
 
         super.init()
     }
@@ -36,4 +27,6 @@ class PostAnnotation: NSObject, MKAnnotation {
 
         self.init(post: post)
     }
+
+    
 }

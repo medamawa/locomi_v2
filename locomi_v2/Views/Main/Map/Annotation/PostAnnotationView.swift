@@ -17,8 +17,8 @@ class PostAnnotationView: MKAnnotationView {
 
     var containerView: UIView!
     var imageButtonProfile: UIButton!
-    var labelContent: UILabel!
-    var labelLikes: UILabel!
+    var labelContent = UILabel()
+    var labelLikes = UILabel()
     var badgeView: UIView!
 
     var expandedContainerView: UIView!
@@ -75,9 +75,9 @@ class PostAnnotationView: MKAnnotationView {
         containerView.addSubview(imageButtonProfile)
     }
     func setupLabelContent() {
-        labelContent = UILabel()
+//        labelContent = UILabel()
         
-        labelContent.text = "sample text"
+        labelContent.text = "--"
         labelContent.font = UIFont.systemFont(ofSize: 10)
         labelContent.textAlignment = .center
         
@@ -85,9 +85,9 @@ class PostAnnotationView: MKAnnotationView {
         containerView.addSubview(labelContent)
     }
     func setupLabelLikes() {
-        labelLikes = UILabel()
+//        labelLikes = UILabel()
 
-        labelLikes.text = "10"
+        labelLikes.text = "- likes"
         labelLikes.font = UIFont.systemFont(ofSize: 8)
         labelLikes.textColor = .systemPink
         labelLikes.textAlignment = .center
@@ -174,6 +174,16 @@ class PostAnnotationView: MKAnnotationView {
             self.transform = .identity
             self.alpha = 1
         })
+    }
+
+    override var annotation: MKAnnotation? {
+        willSet {
+            guard let postAnnotation = newValue as? PostAnnotation else { return }
+            let post = postAnnotation.post
+
+            labelContent.text = post.content
+            labelLikes.text = "\(post.likesCount) likes"
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {

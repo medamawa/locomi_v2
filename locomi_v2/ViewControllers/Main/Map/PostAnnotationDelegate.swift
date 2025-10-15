@@ -12,13 +12,13 @@ extension MapViewController: PostAnnotationViewDelegate {
     func postAnnotationViewDidTapProfile(_ view: PostAnnotationView) {
         guard let postAnnotation = view.annotation as? PostAnnotation else { return }
 
-        print("\(postAnnotation.title)'s profile is tapped")
+        print("\(postAnnotation.post.content)'s profile is tapped")
     }
 
     func postAnnotationViewDidTapDetail(_ view: PostAnnotationView) {
         guard let postAnnotation = view.annotation as? PostAnnotation else { return }
 
-        print("\(postAnnotation.title)'s detail is tapped")
+        print("\(postAnnotation.post.content)'s detail is tapped")
     }
 
 
