@@ -25,6 +25,8 @@ class MapViewController: UIViewController {
         super.viewDidLoad()
 
         mapView.mapView.delegate = self
+        mapView.mapView.register(PostAnnotationView.self, forAnnotationViewWithReuseIdentifier: PostAnnotationView.reuseIdentifier)
+        mapView.mapView.register(PostClusterAnnotationView.self, forAnnotationViewWithReuseIdentifier: PostClusterAnnotationView.reuseIdentifier)
         mapView.mapView.showsUserLocation = true
         locationManager.configure(presentingViewController: self)
 
@@ -33,7 +35,6 @@ class MapViewController: UIViewController {
 
         loadPosts()
         locationManager.fetchCurrentLocation { currentLocation in
-
             guard let currentLocation = currentLocation else {
                 self.mapView.mapView.centerToLocation(location: CLLocation(latitude: 0, longitude: 0))
                 return

@@ -1,18 +1,15 @@
 //
-//  PostAnnotationView.swift
+//  PostClusterAnnotationView.swift
 //  locomi_v2
 //
-//  Created by Sogo Nishihara on 2025/10/09.
+//  Created by Sogo Nishihara on 2025/10/15.
 //
 
 import MapKit
 
-class PostAnnotationView: MKAnnotationView {
+class PostClusterAnnotationView: MKAnnotationView {
 
-    static let reuseIdentifier = "PostAnnotation"
-    static let clusteringPostIdentifier = "post"
-
-    var delegate: PostAnnotationViewDelegate?
+    static let reuseIdentifier = "PostClusterAnnotation"
 
     internal var isExpanded = false
 
@@ -23,7 +20,6 @@ class PostAnnotationView: MKAnnotationView {
     var badgeView: UIView!
 
     var expandedContainerView: UIView!
-    var buttonDetail: UIButton!
 
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
@@ -39,9 +35,6 @@ class PostAnnotationView: MKAnnotationView {
         setupBadgeView()
 
         setupExpandedContainerView()
-        setupButtonDetail()
-
-        setupButtons()
 
         initConstraints()
     }
@@ -77,11 +70,11 @@ class PostAnnotationView: MKAnnotationView {
     }
     func setupLabelContent() {
 //        labelContent = UILabel()
-        
+
         labelContent.text = "--"
         labelContent.font = UIFont.systemFont(ofSize: 10)
         labelContent.textAlignment = .center
-        
+
         labelContent.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(labelContent)
     }
@@ -92,7 +85,7 @@ class PostAnnotationView: MKAnnotationView {
         labelLikes.font = UIFont.systemFont(ofSize: 8)
         labelLikes.textColor = .systemPink
         labelLikes.textAlignment = .center
-        
+
         labelLikes.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(labelLikes)
     }
@@ -116,14 +109,6 @@ class PostAnnotationView: MKAnnotationView {
 
         expandedContainerView.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(expandedContainerView)
-    }
-    func setupButtonDetail() {
-        buttonDetail = UIButton(type: .system)
-
-        buttonDetail.setImage(UIImage(systemName: "ellipsis.bubble"), for: .normal)
-
-        buttonDetail.translatesAutoresizingMaskIntoConstraints = false
-        expandedContainerView.addSubview(buttonDetail)
     }
 
     func initConstraints() {
@@ -154,9 +139,6 @@ class PostAnnotationView: MKAnnotationView {
             expandedContainerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             expandedContainerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             expandedContainerView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-
-            buttonDetail.topAnchor.constraint(equalTo: expandedContainerView.topAnchor, constant: 8),
-            buttonDetail.centerXAnchor.constraint(equalTo: expandedContainerView.centerXAnchor),
         ])
     }
 
@@ -179,14 +161,12 @@ class PostAnnotationView: MKAnnotationView {
 
     override var annotation: MKAnnotation? {
         willSet {
-            guard let postAnnotation = newValue as? PostAnnotation else { return }
-            let post = postAnnotation.post
-
-            canShowCallout = false
-            clusteringIdentifier = Self.clusteringPostIdentifier
+            guard let cluster = newValue as? MKClusterAnnotation else { return }
+            guard let topmostPostAnnotation = cluster.memberAnnotations.first as? PostAnnotation else { return }
+            let post = topmostPostAnnotation.post
 
             labelContent.text = post.content
-            labelLikes.text = "\(post.likesCount) likes"
+            labelLikes.text = "\(post.likesCount) likes (+ \(cluster.memberAnnotations.count) more)"
         }
     }
 
