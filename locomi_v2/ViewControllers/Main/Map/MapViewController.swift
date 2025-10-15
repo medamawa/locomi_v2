@@ -25,6 +25,7 @@ class MapViewController: UIViewController {
         super.viewDidLoad()
 
         mapView.mapView.delegate = self
+        mapView.mapView.showsUserLocation = true
         locationManager.configure(presentingViewController: self)
 
         mapView.buttonAddPost.addTarget(self, action: #selector(didButtonAddPostTapped), for: .touchUpInside)
@@ -40,6 +41,18 @@ class MapViewController: UIViewController {
 
             self.mapView.mapView.centerToLocation(location: currentLocation)
         }
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
 
     @objc func didButtonAddPostTapped() {
