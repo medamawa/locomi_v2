@@ -31,6 +31,7 @@ class MapViewController: UIViewController {
         locationManager.configure(presentingViewController: self)
 
         mapView.buttonAddPost.addTarget(self, action: #selector(didButtonAddPostTapped), for: .touchUpInside)
+        mapView.buttonReload.addTarget(self, action: #selector(didButtonReloadTapped), for: .touchUpInside)
         mapView.buttonCurrentLocation.addTarget(self, action: #selector(didButtonCurrentLocationTapped), for: .touchUpInside)
 
         loadPosts()
@@ -62,6 +63,10 @@ class MapViewController: UIViewController {
             
             self.coordinator?.showAddPost(at: currentLocation)
         }
+    }
+
+    @objc func didButtonReloadTapped() {
+        loadPosts()
     }
 
     @objc func didButtonCurrentLocationTapped() {
