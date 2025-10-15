@@ -1,5 +1,5 @@
 //
-//  MapViewDelegate.swift
+//  MapVC+MapViewDelegate.swift
 //  locomi_v2
 //
 //  Created by Sogo Nishihara on 2025/10/09.

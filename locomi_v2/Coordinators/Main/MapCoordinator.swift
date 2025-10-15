@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import MapKit
 
 class MapCoordinator: Coordinator {
     var childCoordinators = [Coordinator]()
@@ -23,10 +24,11 @@ class MapCoordinator: Coordinator {
         navigationController.setViewControllers([mapVC], animated: true)
     }
 
-    func showAddPost() {
+    func showAddPost(at initialCoordinate: CLLocation) {
         let addPostVC = AddPostViewController()
 
         addPostVC.coordinator = self
+        addPostVC.postCoordinate = initialCoordinate
 
         let nav = UINavigationController(rootViewController: addPostVC)
         nav.modalTransitionStyle = .coverVertical

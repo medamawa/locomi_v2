@@ -57,7 +57,11 @@ class MapViewController: UIViewController {
     }
 
     @objc func didButtonAddPostTapped() {
-        coordinator?.showAddPost()
+        locationManager.fetchCurrentLocation { currentLocation in
+            guard let currentLocation else { return }
+            
+            self.coordinator?.showAddPost(at: currentLocation)
+        }
     }
 
     @objc func didButtonCurrentLocationTapped() {
