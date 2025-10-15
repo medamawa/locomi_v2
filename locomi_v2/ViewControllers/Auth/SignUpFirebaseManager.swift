@@ -35,11 +35,13 @@ extension SignUpViewController {
             try collectionUsers
                 .document(user.uid)
                 .setData(from: user) { error in
-                    if error == nil {
-                        // Success to store
-                    } else {
-                        let errorInfo = error!.firestoreErrorInfo
-                        self.showErrorAlert(title: errorInfo.title, message: errorInfo.message)
+                    DispatchQueue.main.async {
+                        if let error = error {
+                            let errorInfo = error.firestoreErrorInfo
+                            self.showErrorAlert(title: errorInfo.title, message: errorInfo.message)
+                        }
+
+                        // success
                     }
                 }
         } catch {

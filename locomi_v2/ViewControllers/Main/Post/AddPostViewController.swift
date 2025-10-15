@@ -7,6 +7,7 @@
 
 import UIKit
 import MapKit
+import FirebaseAuth
 
 class AddPostViewController: UIViewController {
 
@@ -17,6 +18,8 @@ class AddPostViewController: UIViewController {
     var postCoordinate: CLLocation!
     let addPostView = AddPostView()
     private var postPin = MKPointAnnotation()
+
+    var currentUser = Auth.auth().currentUser!
 
     override func loadView() {
         self.view = addPostView
@@ -44,8 +47,12 @@ class AddPostViewController: UIViewController {
     }
 
     @objc func didTapPostButton() {
-        print("post")
+        let content = addPostView.textViewContent.text!
+
+        let newPost = Post(uid: currentUser.uid, content: content, location: postCoordinate)
+
+        print(newPost)
+        savePostToFirestore(post: newPost)
         dismiss(animated: true)
     }
-
 }
