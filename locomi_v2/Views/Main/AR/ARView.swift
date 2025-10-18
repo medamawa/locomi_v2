@@ -13,7 +13,7 @@ class ARView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = .white
+        self.backgroundColor = .systemTeal
 
         setupLabelAR()
 

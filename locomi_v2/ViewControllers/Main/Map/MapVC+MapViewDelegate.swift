@@ -7,8 +7,8 @@
 
 import MapKit
 
-extension MapViewController: MKMapViewDelegate {
-    
+extension MapViewController: MKMapViewDelegate, UIAdaptivePresentationControllerDelegate {
+
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
 
         // For cluster annotation view
@@ -52,14 +52,37 @@ extension MapViewController: MKMapViewDelegate {
      }
 
      func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-         guard let postAnnotationView = view as? PostAnnotationView else { return }
 
-         postAnnotationView.expand()
+         // TODO: selected
+//         guard let postAnnotationView = view as? PostAnnotationView else { return }
+//         postAnnotationView.expand()
+
+         var posts: [Post] = []
+
+         if let cluster = view.annotation as? MKClusterAnnotation {
+             posts = cluster.memberAnnotations.compactMap {
+                 ($0 as? PostAnnotation)?.post
+             }
+         } else if let postAnnotation = view.annotation as? PostAnnotation {
+             posts = [postAnnotation.post]
+         } else {
+             return
+         }
+
+         let sheetVC = PostSheetViewController(posts: posts)
+         sheetVC.presentationController?.delegate = self
+         present(sheetVC, animated: true)
      }
 
      func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
+         // TODO: deselect
          guard let postAnnotationView = view as? PostAnnotationView else { return }
-
          postAnnotationView.collapse()
      }
+
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        mapView.mapView.selectedAnnotations.forEach { annotation in
+            mapView.mapView.deselectAnnotation(annotation, animated: true)
+        }
+    }
 }

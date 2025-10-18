@@ -22,8 +22,8 @@ extension PostAnnotationView {
                        options: [.curveEaseInOut],
                        animations: {
 
-            self.frame.size = CGSize(width: 240, height: 360)
-            self.centerOffset = CGPoint(x: 0, y: -180)
+            self.frame.size = CGSize(width: 80, height: 100)
+            self.centerOffset = CGPoint(x: 0, y: -50)
 
             self.expandedContainerView.alpha = 1
             self.layoutIfNeeded()
