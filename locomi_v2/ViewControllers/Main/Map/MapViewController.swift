@@ -15,7 +15,7 @@ class MapViewController: UIViewController {
     let locationManager = LocationManager()
 
     var mapView = MapView()
-    private var posts: [Post] = []
+    private var postsWithUsers: [PostWithUser] = []
 
     override func loadView() {
         view = mapView
@@ -34,7 +34,7 @@ class MapViewController: UIViewController {
         mapView.buttonReload.addTarget(self, action: #selector(didButtonReloadTapped), for: .touchUpInside)
         mapView.buttonCurrentLocation.addTarget(self, action: #selector(didButtonCurrentLocationTapped), for: .touchUpInside)
 
-        loadPosts()
+        loadPostsWithUsers()
         locationManager.fetchCurrentLocation { currentLocation in
             guard let currentLocation = currentLocation else {
                 self.mapView.mapView.centerToLocation(location: CLLocation(latitude: 0, longitude: 0))
@@ -66,7 +66,7 @@ class MapViewController: UIViewController {
     }
 
     @objc func didButtonReloadTapped() {
-        loadPosts()
+        loadPostsWithUsers()
     }
 
     @objc func didButtonCurrentLocationTapped() {
@@ -78,29 +78,29 @@ class MapViewController: UIViewController {
         }
     }
 
-    private func loadPosts() {
+    private func loadPostsWithUsers() {
 
-        FirestoreManager.shared.getAllPosts { posts, error in
+        FirestoreManager.shared.getAllPostsWithUsers { postsWithUsers, error in
             DispatchQueue.main.async {
                 if let error = error {
                     self.showErrorAlert(title: "Failed to fetch posts", message: error.localizedDescription)
                     return
                 }
 
-                guard let posts = posts else { return }
+                guard let postsWithUsers = postsWithUsers else { return }
 
-                self.displayPosts(posts)
+                self.displayPosts(postsWithUsers)
             }
         }
 
     }
 
-    func displayPosts(_ posts: [Post]) {
-        self.posts = posts
+    func displayPosts(_ postsWithUsers: [PostWithUser]) {
+        self.postsWithUsers = postsWithUsers
 
         mapView.mapView.removeAnnotations(mapView.mapView.annotations)
 
-        let annotations = posts.compactMap { PostAnnotation(post: $0) }
+        let annotations = postsWithUsers.compactMap { PostAnnotation(postWithUser: $0) }
         mapView.mapView.addAnnotations(annotations)
 
     }

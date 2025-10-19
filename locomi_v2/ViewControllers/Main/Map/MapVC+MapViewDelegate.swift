@@ -57,19 +57,19 @@ extension MapViewController: MKMapViewDelegate, UIAdaptivePresentationController
 //         guard let postAnnotationView = view as? PostAnnotationView else { return }
 //         postAnnotationView.expand()
 
-         var posts: [Post] = []
+         var postsWithUsers: [PostWithUser] = []
 
          if let cluster = view.annotation as? MKClusterAnnotation {
-             posts = cluster.memberAnnotations.compactMap {
-                 ($0 as? PostAnnotation)?.post
+             postsWithUsers = cluster.memberAnnotations.compactMap {
+                 ($0 as? PostAnnotation)?.postWithUser
              }
          } else if let postAnnotation = view.annotation as? PostAnnotation {
-             posts = [postAnnotation.post]
+             postsWithUsers = [postAnnotation.postWithUser]
          } else {
              return
          }
 
-         let sheetVC = PostSheetViewController(posts: posts)
+         let sheetVC = PostSheetViewController(postsWithUsers: postsWithUsers)
          sheetVC.presentationController?.delegate = self
          present(sheetVC, animated: true)
      }

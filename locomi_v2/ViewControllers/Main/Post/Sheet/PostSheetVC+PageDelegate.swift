@@ -21,7 +21,7 @@ extension PostSheetViewController: UIPageViewControllerDataSource, UIPageViewCon
         guard let vc = viewController as? PostDetailViewController else { return nil }
 
         let next = vc.index + 1
-        guard next < posts.count else { return nil }
+        guard next < postsWithUsers.count else { return nil }
         return detailVC(for: next)
     }
 

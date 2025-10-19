@@ -10,22 +10,22 @@ import MapKit
 class PostAnnotation: NSObject, MKAnnotation {
     var coordinate: CLLocationCoordinate2D
 
-    let post: Post
-    
+    let postWithUser: PostWithUser
+
     var isSelected: Bool = false
 
-    init(post: Post) {
-        self.post = post
+    init(postWithUser: PostWithUser) {
+        self.postWithUser = postWithUser
 
-        self.coordinate = post.coordinate
+        self.coordinate = postWithUser.post.coordinate
 
         super.init()
     }
 
-    convenience init?(post: Post?) {
-        guard let post = post else { return nil }
+    convenience init?(postWithUser: PostWithUser?) {
+        guard let postWithUser = postWithUser else { return nil }
 
-        self.init(post: post)
+        self.init(postWithUser: postWithUser)
     }
 
     

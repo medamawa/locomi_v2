@@ -9,14 +9,14 @@ import UIKit
 
 class PostSheetViewController: UIViewController {
 
-    let posts: [Post]
+    let postsWithUsers: [PostWithUser]
     let contentView = PostSheetView()
 
     var pageVC: UIPageViewController!
     var currentIndex = 0
 
-    init(posts: [Post]) {
-        self.posts = posts
+    init(postsWithUsers: [PostWithUser]) {
+        self.postsWithUsers = postsWithUsers
         super.init(nibName: nil, bundle: nil)
 
         modalPresentationStyle = .pageSheet
@@ -41,7 +41,7 @@ class PostSheetViewController: UIViewController {
 
     func setupPageViewController() {
         pageVC = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
-        pageVC.dataSource = (posts.count > 1) ? self : nil
+        pageVC.dataSource = (postsWithUsers.count > 1) ? self : nil
         pageVC.delegate = self
 
         let firstVC = detailVC(for: 0)
@@ -59,7 +59,7 @@ class PostSheetViewController: UIViewController {
         pageVC.didMove(toParent: self)
 
         if let scrollView = pageVC.view.subviews.compactMap({ $0 as? UIScrollView }).first {
-            scrollView.isScrollEnabled = (posts.count > 1)
+            scrollView.isScrollEnabled = (postsWithUsers.count > 1)
         }
     }
 
@@ -71,8 +71,8 @@ class PostSheetViewController: UIViewController {
     }
 
     func setupPageControl() {
-        contentView.pageControl.isHidden = (posts.count <= 1)
-        contentView.pageControl.numberOfPages = posts.count
+        contentView.pageControl.isHidden = (postsWithUsers.count <= 1)
+        contentView.pageControl.numberOfPages = postsWithUsers.count
         contentView.pageControl.currentPage = 0
         contentView.pageControl.isUserInteractionEnabled = true
         contentView.pageControl.addTarget(self, action: #selector(pageControlChanged(_:)), for: .valueChanged)
@@ -92,9 +92,9 @@ class PostSheetViewController: UIViewController {
     }
 
     func detailVC(for index: Int) -> UIViewController {
-        let vc = PostDetailViewController(post: posts[index])
+        let vc = PostDetailViewController(postWithUser: postsWithUsers[index])
         vc.index = index
-        vc.totalCount = posts.count
+        vc.totalCount = postsWithUsers.count
         return vc
     }
 

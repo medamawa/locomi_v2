@@ -163,10 +163,10 @@ class PostClusterAnnotationView: MKAnnotationView {
         willSet {
             guard let cluster = newValue as? MKClusterAnnotation else { return }
             guard let topmostPostAnnotation = cluster.memberAnnotations.first as? PostAnnotation else { return }
-            let post = topmostPostAnnotation.post
+            let postWithUser = topmostPostAnnotation.postWithUser
 
-            labelContent.text = post.content
-            labelLikes.text = "\(post.likesCount) likes (+ \(cluster.memberAnnotations.count) more)"
+            labelContent.text = postWithUser.post.content
+            labelLikes.text = "\(postWithUser.post.likesCount) likes (+ \(cluster.memberAnnotations.count) more)"
         }
     }
 

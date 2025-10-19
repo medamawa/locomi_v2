@@ -180,13 +180,14 @@ class PostAnnotationView: MKAnnotationView {
     override var annotation: MKAnnotation? {
         willSet {
             guard let postAnnotation = newValue as? PostAnnotation else { return }
-            let post = postAnnotation.post
+            let postWithUser = postAnnotation.postWithUser
 
             canShowCallout = false
             clusteringIdentifier = Self.clusteringPostIdentifier
 
-            labelContent.text = post.content
-            labelLikes.text = "\(post.likesCount) likes"
+            
+            labelContent.text = postWithUser.post.content
+            labelLikes.text = "\(postWithUser.post.likesCount) likes"
         }
     }
 

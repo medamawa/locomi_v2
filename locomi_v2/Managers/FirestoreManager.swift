@@ -26,6 +26,43 @@ class FirestoreManager {
         }
     }
 
+    func getAllPostsWithUsers(completion: @escaping ([PostWithUser]?, Error?) -> Void) {
+        let db = Firestore.firestore()
+
+        db.collection("posts").getDocuments { snapshot, error in
+            if let error = error {
+                completion(nil, error)
+                return
+            }
+
+            guard let documents = snapshot?.documents else {
+                completion([], nil)
+                return
+            }
+
+            var results: [PostWithUser] = []
+            let group = DispatchGroup()
+
+            for document in documents {
+                if let post = try? document.data(as: Post.self) {
+                    group.enter()
+                    db.collection("users")
+                        .whereField("uid", isEqualTo: post.uid)
+                        .getDocuments { userSnapshot, _ in
+                            let user = try? userSnapshot?.documents.first?.data(as: User.self)
+                            results.append(PostWithUser(post: post, user: user))
+                            group.leave()
+                        }
+                }
+            }
+
+            group.notify(queue: .main) {
+                let sorted = results.sorted { $0.post.createdAt > $1.post.createdAt }
+                completion(sorted, nil)
+            }
+        }
+    }
+
     func savePost(_ post: Post, completion: @escaping (Error?) -> Void) {
         let db = Firestore.firestore()
         do {
