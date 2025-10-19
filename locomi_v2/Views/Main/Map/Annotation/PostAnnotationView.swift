@@ -14,149 +14,143 @@ class PostAnnotationView: MKAnnotationView {
 
     var delegate: PostAnnotationViewDelegate?
 
-    internal var isExpanded = false
-
-    var containerView: UIView!
     var imageButtonProfile: UIButton!
-    var labelContent = UILabel()
-    var labelLikes = UILabel()
-    var badgeView: UIView!
-
-    var expandedContainerView: UIView!
-    var buttonDetail: UIButton!
+    var bubbleView: UIView!
+    var labelContent: UILabel!
+    var labelComments: UILabel!
+    var labelLikes: UILabel!
 
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
 
-        self.frame = CGRect(x: 0, y: 0, width: 60, height: 80)
-        self.centerOffset = CGPoint(x: 0, y: -40)
+        self.frame = CGRect(x: 0, y: 0, width: 100, height: 80)
+//        self.layer.borderWidth = 1
+        self.centerOffset = CGPoint(x: 0, y: -20)
         self.backgroundColor = .clear
 
-        setupContainerView()
         setupImageViewProfile()
+        setupBubbleView()
         setupLabelContent()
+        setupLabelComments()
         setupLabelLikes()
-        setupBadgeView()
-
-        setupExpandedContainerView()
-        setupButtonDetail()
-
-        setupButtons()
 
         initConstraints()
     }
 
-    func setupContainerView() {
-        containerView = UIView()
-
-        containerView.backgroundColor = .white
-        containerView.alpha = 0.8
-
-        containerView.layer.cornerRadius = 8
-        containerView.layer.borderWidth = 1
-        containerView.layer.borderColor = UIColor.gray.cgColor
-
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(containerView)
-    }
     func setupImageViewProfile() {
         imageButtonProfile = UIButton(type: .system)
 
         imageButtonProfile.setImage(
-            UIImage(systemName: "face.smiling")?.withTintColor(.black, renderingMode: .alwaysOriginal)
+            UIImage(systemName: "person.fill")?.withTintColor(.black, renderingMode: .alwaysOriginal)
             , for: .normal)
         imageButtonProfile.contentMode = .scaleAspectFill
         imageButtonProfile.clipsToBounds = true
-        imageButtonProfile.backgroundColor = .systemGray4
-        imageButtonProfile.layer.cornerRadius = 18
+        imageButtonProfile.backgroundColor = UIColor.white.withAlphaComponent(0.9)
+        imageButtonProfile.layer.cornerRadius = 20
+        imageButtonProfile.layer.borderWidth = 1
 
         imageButtonProfile.isEnabled = false
 
         imageButtonProfile.translatesAutoresizingMaskIntoConstraints = false
-        containerView.addSubview(imageButtonProfile)
+        self.addSubview(imageButtonProfile)
+    }
+    func setupBubbleView() {
+        bubbleView = UIView()
+
+        // Add a custom speach bubble tail
+        let rect = CGRect(x: 0, y: 0, width: 100, height: 40)
+        let tailWidth: CGFloat = 12
+        let tailHeight: CGFloat = 6
+        let cornerRadius: CGFloat = 10
+        let tailLayer = CAShapeLayer()
+        let path = UIBezierPath()
+
+        // Draw rounded rect
+        path.move(to: CGPoint(x: cornerRadius, y: 0))
+        path.addLine(to: CGPoint(x: rect.width - cornerRadius, y: 0))
+        path.addQuadCurve(to: CGPoint(x: rect.width, y: cornerRadius), controlPoint: CGPoint(x: rect.width, y: 0))
+        path.addLine(to: CGPoint(x: rect.width, y: rect.height - tailHeight - cornerRadius))
+        path.addQuadCurve(to: CGPoint(x: rect.width - cornerRadius, y: rect.height - tailHeight), controlPoint: CGPoint(x: rect.width, y: rect.height - tailHeight))
+        // Tail
+        path.addLine(to: CGPoint(x: rect.width/2 + tailWidth/2, y: rect.height - tailHeight))
+        path.addLine(to: CGPoint(x: rect.width/2, y: rect.height))
+        path.addLine(to: CGPoint(x: rect.width/2 - tailWidth/2, y: rect.height - tailHeight))
+        // Rect
+        path.addLine(to: CGPoint(x: cornerRadius, y: rect.height - tailHeight))
+        path.addQuadCurve(to: CGPoint(x: 0, y: rect.height - tailHeight - cornerRadius), controlPoint: CGPoint(x: 0, y: rect.height - tailHeight))
+        path.addLine(to: CGPoint(x: 0, y: cornerRadius))
+        path.addQuadCurve(to: CGPoint(x: cornerRadius, y: 0), controlPoint: CGPoint(x: 0, y: 0))
+        path.close()
+
+        tailLayer.path = path.cgPath
+        tailLayer.fillColor = UIColor.white.withAlphaComponent(0.9).cgColor
+        tailLayer.strokeColor = UIColor.gray.cgColor
+        tailLayer.lineWidth = 1
+        bubbleView.layer.insertSublayer(tailLayer, at: 0)
+
+        bubbleView.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(bubbleView)
     }
     func setupLabelContent() {
-//        labelContent = UILabel()
+        labelContent = UILabel()
         
         labelContent.text = "--"
         labelContent.font = UIFont.systemFont(ofSize: 10)
         labelContent.textAlignment = .center
-        
+        labelContent.numberOfLines = 1
+
         labelContent.translatesAutoresizingMaskIntoConstraints = false
-        containerView.addSubview(labelContent)
+        bubbleView.addSubview(labelContent)
+    }
+    func setupLabelComments() {
+        labelComments = UILabel()
+
+        labelComments.text = "⚪︎ -"
+        labelComments.font = UIFont.systemFont(ofSize: 8)
+        labelComments.textColor = .systemBlue
+        labelComments.textAlignment = .left
+
+        labelComments.translatesAutoresizingMaskIntoConstraints = false
+        bubbleView.addSubview(labelComments)
     }
     func setupLabelLikes() {
-//        labelLikes = UILabel()
+        labelLikes = UILabel()
 
-        labelLikes.text = "- likes"
+        labelLikes.text = "♡ -"
         labelLikes.font = UIFont.systemFont(ofSize: 8)
         labelLikes.textColor = .systemPink
-        labelLikes.textAlignment = .center
-        
+        labelLikes.textAlignment = .right
+
         labelLikes.translatesAutoresizingMaskIntoConstraints = false
-        containerView.addSubview(labelLikes)
-    }
-    func setupBadgeView() {
-        badgeView = UIView()
-
-        badgeView.backgroundColor = .systemRed
-
-        badgeView.layer.cornerRadius = 6
-
-        badgeView.isHidden = false
-
-        badgeView.translatesAutoresizingMaskIntoConstraints = false
-        containerView.addSubview(badgeView)
-    }
-    func setupExpandedContainerView() {
-        expandedContainerView = UIView()
-
-        expandedContainerView.alpha = 0
-        expandedContainerView.isHidden = true
-
-        expandedContainerView.translatesAutoresizingMaskIntoConstraints = false
-        containerView.addSubview(expandedContainerView)
-    }
-    func setupButtonDetail() {
-        buttonDetail = UIButton(type: .system)
-
-        buttonDetail.setImage(UIImage(systemName: "ellipsis.bubble"), for: .normal)
-
-        buttonDetail.translatesAutoresizingMaskIntoConstraints = false
-        expandedContainerView.addSubview(buttonDetail)
+        bubbleView.addSubview(labelLikes)
     }
 
     func initConstraints() {
         NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: self.topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            // Bubble view
+            bubbleView.topAnchor.constraint(equalTo: self.topAnchor),
+            bubbleView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            bubbleView.widthAnchor.constraint(equalToConstant: 100),
+            bubbleView.heightAnchor.constraint(equalToConstant: 40),
 
-            imageButtonProfile.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 8),
-            imageButtonProfile.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            imageButtonProfile.widthAnchor.constraint(equalToConstant: 36),
-            imageButtonProfile.heightAnchor.constraint(equalToConstant: 36),
+            // Content label inside bubble near top center
+            labelContent.topAnchor.constraint(equalTo: bubbleView.topAnchor, constant: 5),
+            labelContent.leadingAnchor.constraint(equalTo: bubbleView.leadingAnchor, constant: 8),
+            labelContent.trailingAnchor.constraint(equalTo: bubbleView.trailingAnchor, constant: -8),
 
-            labelContent.topAnchor.constraint(equalTo: imageButtonProfile.bottomAnchor, constant: 4),
-            labelContent.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 4),
-            labelContent.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -4),
+            // Comments label bottom left inside bubble
+            labelComments.bottomAnchor.constraint(equalTo: bubbleView.bottomAnchor, constant: -10),
+            labelComments.trailingAnchor.constraint(equalTo: bubbleView.centerXAnchor, constant: -8),
 
-            labelLikes.topAnchor.constraint(equalTo: labelContent.bottomAnchor, constant: 4),
-            labelLikes.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            // Likes label bottom right inside bubble
+            labelLikes.bottomAnchor.constraint(equalTo: bubbleView.bottomAnchor, constant: -10),
+            labelLikes.leadingAnchor.constraint(equalTo: bubbleView.centerXAnchor, constant: 8),
 
-            badgeView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 4),
-            badgeView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -4),
-            badgeView.widthAnchor.constraint(equalToConstant: 12),
-            badgeView.heightAnchor.constraint(equalToConstant: 12),
-
-            expandedContainerView.topAnchor.constraint(equalTo: labelLikes.bottomAnchor, constant: 4),
-            expandedContainerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            expandedContainerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            expandedContainerView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-
-            buttonDetail.topAnchor.constraint(equalTo: expandedContainerView.topAnchor, constant: 8),
-            buttonDetail.centerXAnchor.constraint(equalTo: expandedContainerView.centerXAnchor),
+            // Profile image circular button below bubble
+            imageButtonProfile.topAnchor.constraint(equalTo: bubbleView.bottomAnchor, constant: 5),
+            imageButtonProfile.centerXAnchor.constraint(equalTo: bubbleView.centerXAnchor),
+            imageButtonProfile.widthAnchor.constraint(equalToConstant: 40),
+            imageButtonProfile.heightAnchor.constraint(equalToConstant: 40),
         ])
     }
 
@@ -184,10 +178,10 @@ class PostAnnotationView: MKAnnotationView {
 
             canShowCallout = false
             clusteringIdentifier = Self.clusteringPostIdentifier
-
             
             labelContent.text = postWithUser.post.content
-            labelLikes.text = "\(postWithUser.post.likesCount) likes"
+            labelComments.text = "⚪︎ \(postWithUser.post.commentsCount)"
+            labelLikes.text = "♡ \(postWithUser.post.likesCount)"
         }
     }
 

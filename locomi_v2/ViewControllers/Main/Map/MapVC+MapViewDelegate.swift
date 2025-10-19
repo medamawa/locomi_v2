@@ -53,18 +53,21 @@ extension MapViewController: MKMapViewDelegate, UIAdaptivePresentationController
 
      func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
 
-         // TODO: selected
-//         guard let postAnnotationView = view as? PostAnnotationView else { return }
-//         postAnnotationView.expand()
-
          var postsWithUsers: [PostWithUser] = []
 
-         if let cluster = view.annotation as? MKClusterAnnotation {
+         if let postAnnotationView = view as? PostAnnotationView {
+             postAnnotationView.select()
+
+             guard let postAnnotation = postAnnotationView.annotation as? PostAnnotation else { return }
+
+             postsWithUsers = [postAnnotation.postWithUser]
+         } else if let clusterView = view as? PostClusterAnnotationView {
+             clusterView.select()
+
+             guard let cluster = clusterView.annotation as? MKClusterAnnotation else { return }
              postsWithUsers = cluster.memberAnnotations.compactMap {
                  ($0 as? PostAnnotation)?.postWithUser
              }
-         } else if let postAnnotation = view.annotation as? PostAnnotation {
-             postsWithUsers = [postAnnotation.postWithUser]
          } else {
              return
          }
@@ -75,9 +78,11 @@ extension MapViewController: MKMapViewDelegate, UIAdaptivePresentationController
      }
 
      func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
-         // TODO: deselect
-         guard let postAnnotationView = view as? PostAnnotationView else { return }
-         postAnnotationView.collapse()
+         if let postAnnotationView = view as? PostAnnotationView {
+             postAnnotationView.deselect()
+         } else if let clusterView = view as? PostClusterAnnotationView {
+             clusterView.deselect()
+         }
      }
 
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
