@@ -8,10 +8,9 @@
 import UIKit
 
 class AuthCoordinator: Coordinator {
-    var childCoordinators = [Coordinator]()
     var parentCoordinator: AppCoordinator?
-
-    private let navigationController: UINavigationController
+    var childCoordinators = [Coordinator]()
+    let navigationController: UINavigationController
 
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController

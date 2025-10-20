@@ -11,34 +11,66 @@ import FirebaseFirestore
 
 class ProfileViewController: UIViewController {
 
+    // MARK: - Properties
     var coordinator: ProfileCoordinator?
 
-    var profileView = ProfileView()
+    let profileView = ProfileView()
+    private var user: User?
+    private var isCurrentUser: Bool
 
-    var currentUser = Auth.auth().currentUser!
-    var uid: String? = nil
+    // MARK: - Initializers
+    /// For displaying the current user's profile
+    init() {
+        self.isCurrentUser = true
+        super.init(nibName: nil, bundle: nil)
+    }
 
+    /// For displaying another user's profile
+    init(user: User) {
+        self.user = user
+        self.isCurrentUser = false
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Lifecycle
     override func loadView() {
         view = profileView
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .systemBackground
 
-        profileView.buttonLogout.addTarget(self, action: #selector(didTapLogOut), for: .touchUpInside)
-
-        if (uid == nil) {
-            uid = currentUser.uid
-        }
-        setupUserInfo(uid: self.uid!)
+        setupActions()
+        setupUserInfo()
     }
 
-    func setupUserInfo(uid: String) {
-        let db = Firestore.firestore()
+    // MARK: - Setup
+    func setupActions() {
+        profileView.buttonLogout.addTarget(self, action: #selector(didTapLogOut), for: .touchUpInside)
+    }
 
-        db.collection("users")
+    func setupUserInfo() {
+        if let user = self.user {
+            // If a User is passed in
+            configure(with: user)
+        } else if let currentUser = Auth.auth().currentUser {
+            // Fetch the current user's profile from Firestore
+            fetchUserInfo(uid: currentUser.uid)
+        }
+    }
+
+    func fetchUserInfo(uid: String) {
+        Firestore.firestore()
+            .collection("users")
             .document(uid)
-            .getDocument { (document, error) in
+            .getDocument { [weak self] (document, error) in
+                guard let self = self else { return }
+
                 if let error = error {
                     print("Error fetching user: \(error.localizedDescription)")
                     return
@@ -51,22 +83,28 @@ class ProfileViewController: UIViewController {
 
                 do {
                     let user: User = try document.data(as: User.self)
-
                     DispatchQueue.main.async {
-                        self.profileView.labelName.text = user.displayName
-                        self.profileView.labelUsername.text = "@\(user.username)"
-                        self.profileView.labelBio.text = user.bio ?? "I'm nothing... :|"
-                        self.profileView.labelPostsCount.text = "\(user.postsCount)"
-                        self.profileView.labelFollowersCount.text = "\(user.followersCount)"
-                        self.profileView.labelFollowingCount.text = "\(user.followingCount)"
+                        self.configure(with: user)
                     }
-
                 } catch {
                     print("Error decoding user: \(error.localizedDescription)")
                 }
             }
     }
 
+    func configure(with user: User) {
+        profileView.labelName.text = user.displayName
+        profileView.labelUsername.text = "@\(user.username)"
+        profileView.labelBio.text = user.bio ?? "I'm nothing... :|"
+        profileView.labelPostsCount.text = "\(user.postsCount)"
+        profileView.labelFollowersCount.text = "\(user.followersCount)"
+        profileView.labelFollowingCount.text = "\(user.followingCount)"
+
+        // Hide the logout button when viewing another user's profile
+        profileView.buttonLogout.isHidden = !isCurrentUser
+    }
+
+    // MARK: - Actions
     @objc func didTapLogOut() {
         let logoutAlert = UIAlertController(title: "Logging out", message: "Are you sure want to log out?", preferredStyle: .actionSheet)
         logoutAlert.addAction(UIAlertAction(title: "Yes, log out", style: .default, handler: {(_) in

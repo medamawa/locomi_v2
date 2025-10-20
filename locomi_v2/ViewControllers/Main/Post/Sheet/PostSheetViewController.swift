@@ -9,6 +9,8 @@ import UIKit
 
 class PostSheetViewController: UIViewController {
 
+    weak var coordinator: PostCoordinator?
+
     let postsWithUsers: [PostWithUser]
     let contentView = PostSheetView()
 

@@ -8,10 +8,10 @@
 import UIKit
 
 class MainCoordinator: Coordinator {
-    var childCoordinators = [Coordinator]()
     var parentCoordinator: AppCoordinator?
+    var childCoordinators = [Coordinator]()
+    let navigationController: UINavigationController
 
-    private let navigationController: UINavigationController
     private var tabBarController: MainTabBarController?
 
     init(navigationController: UINavigationController) {

@@ -8,9 +8,8 @@
 import UIKit
 
 class ARCoordinator: Coordinator {
-
     var childCoordinators = [Coordinator]()
-    var navigationController: UINavigationController
+    let navigationController: UINavigationController
 
     init() {
         self.navigationController = UINavigationController()

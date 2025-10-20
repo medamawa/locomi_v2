@@ -10,7 +10,7 @@ import MapKit
 
 class MapCoordinator: Coordinator {
     var childCoordinators = [Coordinator]()
-    var navigationController: UINavigationController
+    let navigationController: UINavigationController
 
     init() {
         self.navigationController = UINavigationController()
@@ -37,8 +37,11 @@ class MapCoordinator: Coordinator {
     }
 
     func showPostSheet(of postsWithUsers: [PostWithUser], delegate: UIAdaptivePresentationControllerDelegate?) {
-        let postSheetVC = PostSheetViewController(postsWithUsers: postsWithUsers)
-        postSheetVC.presentationController?.delegate = delegate
-        navigationController.present(postSheetVC, animated: true)
+        let postCoordinator = PostCoordinator(navigationController: navigationController)
+        
+        postCoordinator.parentCoordinator = self
+        childCoordinators.append(postCoordinator)
+
+        postCoordinator.showPostSheet(of: postsWithUsers, delegate: delegate)
     }
 }

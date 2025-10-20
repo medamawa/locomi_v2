@@ -10,9 +10,9 @@ import FirebaseAuth
 
 class AppCoordinator: Coordinator {
     var childCoordinators = [Coordinator]()
+    let navigationController: UINavigationController
 
     private let window: UIWindow
-    private let navigationController: UINavigationController
     private var authHandle: AuthStateDidChangeListenerHandle?
 
     init(window: UIWindow) {
