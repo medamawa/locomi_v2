@@ -44,7 +44,20 @@ class ProfileCoordinator: Coordinator {
 
     func showEditProfile(for user: User) {
         let editProfileVC = EditProfileViewController(user: user)
+        editProfileVC.coordinator = self
+        editProfileVC.delegate = self
 
-        self.navigationController.pushViewController(editProfileVC, animated: true)
+        let nav = UINavigationController(rootViewController: editProfileVC)
+        nav.modalTransitionStyle = .coverVertical
+        navigationController.present(nav, animated: true)
     }
+}
+
+extension ProfileCoordinator: EditProfileViewControllerDelegate {
+    func editProfileViewController(_ controller: EditProfileViewController, didUpdate user: User) {
+        if let profileVC = navigationController.viewControllers.last as? ProfileViewController {
+            profileVC.updateUser(user)
+        }
+    }
+
 }

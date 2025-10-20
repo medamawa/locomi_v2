@@ -83,7 +83,7 @@ class ProfileViewController: UIViewController {
 
     func configure(with user: User) {
         Task {
-            profileView.imageViewProfile.image = await user.loadProfileImage()
+            profileView.imageProfile.image = await user.loadProfileImage()
         }
         profileView.labelName.text = user.displayName
         profileView.labelUsername.text = "@\(user.username)"
@@ -98,6 +98,12 @@ class ProfileViewController: UIViewController {
             profileView.buttonEditProfile.isHidden = true
             profileView.buttonLogout.isHidden = true
         }
+    }
+
+    // MARK: - Update
+    func updateUser(_ user: User) {
+        self.user = user
+        self.configure(with: user)
     }
 
     // MARK: - Actions

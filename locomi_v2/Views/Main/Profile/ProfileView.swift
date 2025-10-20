@@ -9,7 +9,8 @@ import UIKit
 
 class ProfileView: UIView {
 
-    var imageViewProfile: UIImageView!
+    var imageHeader: UIImageView!
+    var imageProfile: UIImageView!
     var labelName: UILabel!
     var labelUsername: UILabel!
     var labelBio: UILabel!
@@ -24,7 +25,8 @@ class ProfileView: UIView {
         super.init(frame: frame)
         self.backgroundColor = .systemBackground
 
-        setupImageViewProfile()
+        setupImageHeader()
+        setupImageProfile()
         setupLabelName()
         setupLabelUsername()
         setupLabelBio()
@@ -35,18 +37,30 @@ class ProfileView: UIView {
         initConstraints()
     }
 
-    func setupImageViewProfile() {
-        imageViewProfile = UIImageView()
+    func setupImageHeader() {
+        imageHeader = UIImageView()
 
-        imageViewProfile.image = UIImage(systemName: "person.circle.fill")
-        imageViewProfile.contentMode = .scaleAspectFill
-        imageViewProfile.clipsToBounds = true
-        imageViewProfile.backgroundColor = UIColor.white.withAlphaComponent(0.9)
-        imageViewProfile.layer.cornerRadius = 50
-        imageViewProfile.layer.borderWidth = 1
+        imageHeader.backgroundColor = UIColor.systemGray5
+        imageHeader.contentMode = .scaleAspectFill
+        imageHeader.clipsToBounds = true
 
-        imageViewProfile.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(imageViewProfile)
+        imageHeader.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(imageHeader)
+    }
+
+    func setupImageProfile() {
+        imageProfile = UIImageView()
+
+        imageProfile.image = UIImage(systemName: "person.circle.fill")
+        imageProfile.contentMode = .scaleAspectFill
+        imageProfile.clipsToBounds = true
+        imageProfile.backgroundColor = UIColor.systemGray5
+        imageProfile.layer.cornerRadius = 50
+        imageProfile.layer.borderWidth = 2
+        imageProfile.layer.borderColor = UIColor.white.cgColor
+
+        imageProfile.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(imageProfile)
     }
 
     func setupLabelName() {
@@ -149,12 +163,19 @@ class ProfileView: UIView {
 
     func initConstraints() {
         NSLayoutConstraint.activate([
-            imageViewProfile.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 32),
-            imageViewProfile.centerXAnchor.constraint(equalTo: self.safeAreaLayoutGuide.centerXAnchor),
-            imageViewProfile.widthAnchor.constraint(equalToConstant: 100),
-            imageViewProfile.heightAnchor.constraint(equalToConstant: 100),
+            // Header image
+            imageHeader.topAnchor.constraint(equalTo: self.topAnchor),
+            imageHeader.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            imageHeader.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            imageHeader.heightAnchor.constraint(equalToConstant: 160),
 
-            labelName.topAnchor.constraint(equalTo: imageViewProfile.bottomAnchor, constant: 16),
+            // Profile image
+            imageProfile.centerXAnchor.constraint(equalTo: self.safeAreaLayoutGuide.centerXAnchor),
+            imageProfile.centerYAnchor.constraint(equalTo: imageHeader.bottomAnchor),
+            imageProfile.widthAnchor.constraint(equalToConstant: 100),
+            imageProfile.heightAnchor.constraint(equalToConstant: 100),
+
+            labelName.topAnchor.constraint(equalTo: imageProfile.bottomAnchor, constant: 16),
             labelName.centerXAnchor.constraint(equalTo: self.safeAreaLayoutGuide.centerXAnchor),
             labelName.leadingAnchor.constraint(greaterThanOrEqualTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 24),
             labelName.trailingAnchor.constraint(lessThanOrEqualTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -24),
