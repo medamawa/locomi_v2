@@ -35,4 +35,10 @@ class MapCoordinator: Coordinator {
         nav.modalPresentationStyle = .fullScreen
         navigationController.present(nav, animated: true)
     }
+
+    func showPostSheet(of postsWithUsers: [PostWithUser], delegate: UIAdaptivePresentationControllerDelegate?) {
+        let postSheetVC = PostSheetViewController(postsWithUsers: postsWithUsers)
+        postSheetVC.presentationController?.delegate = delegate
+        navigationController.present(postSheetVC, animated: true)
+    }
 }

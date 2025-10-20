@@ -72,9 +72,7 @@ extension MapViewController: MKMapViewDelegate, UIAdaptivePresentationController
              return
          }
 
-         let sheetVC = PostSheetViewController(postsWithUsers: postsWithUsers)
-         sheetVC.presentationController?.delegate = self
-         present(sheetVC, animated: true)
+         self.coordinator?.showPostSheet(of: postsWithUsers, delegate: self)
      }
 
      func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
