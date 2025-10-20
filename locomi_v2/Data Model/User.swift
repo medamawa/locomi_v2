@@ -14,10 +14,11 @@ struct User: Codable {
     var displayName: String
     var username: String
     var email: String
-    var profileImageURL: URL?
+    var profileImageURL: String?
     var bio: String?
 
     var createdAt: Date
+    var updatedAt: Date?
 
     var postsCount: Int
     var followersCount: Int
@@ -28,7 +29,7 @@ struct User: Codable {
         self.displayName = displayName
         self.username = username
         self.email = email
-        self.profileImageURL = profileImageURL
+        self.profileImageURL = profileImageURL?.absoluteString
         self.bio = bio
         self.createdAt = Date()
         self.postsCount = 0
@@ -37,14 +38,16 @@ struct User: Codable {
     }
 
     func loadProfileImage() async -> UIImage {
-        if let url = profileImageURL {
-            if let cached = await ImageCache.shared.image(for: url.absoluteString) {
+        if let urlString = profileImageURL,
+           !urlString.isEmpty,
+           let url = URL(string: urlString) {
+            if let cached = await ImageCache.shared.image(for: urlString) {
                 return cached
             }
             do {
                 let (data, _) = try await URLSession.shared.data(from: url)
                 if let image = UIImage(data: data) {
-                    await ImageCache.shared.set(image, for: url.absoluteString)
+                    await ImageCache.shared.set(image, for: urlString)
                     return image
                 }
             } catch {

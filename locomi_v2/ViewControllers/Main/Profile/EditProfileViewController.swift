@@ -81,9 +81,27 @@ class EditProfileViewController: UIViewController {
                 bio: editProfileView.textFieldBio.text
             )
 
-            // TODO: update firestore
-            delegate?.editProfileViewController(self, didUpdate: updatedUser)
-            dismiss(animated: true)
+            let fieldsToUpdate: [String: Any] = [
+                "displayName": updatedUser.displayName,
+                "bio": updatedUser.bio ?? "",
+                "profileImageURL": updatedUser.profileImageURL ?? "",
+                "updatedAt": Date()
+            ]
+
+            FirestoreManager.shared.userService.updateUser(uid: self.user.uid, fields: fieldsToUpdate) { error in
+                if let error = error {
+                    print("Error updating user in Firestore: \(error.localizedDescription)")
+                    DispatchQueue.main.async {
+                        self.showErrorAlert(message: "Failed to update profile. Please try again.")
+                    }
+                    return
+                }
+
+                DispatchQueue.main.async {
+                    self.delegate?.editProfileViewController(self, didUpdate: updatedUser)
+                    self.dismiss(animated: true)
+                }
+            }
         }
 
         if let profileImage = pickedImage {
