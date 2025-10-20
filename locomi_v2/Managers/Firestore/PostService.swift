@@ -9,10 +9,10 @@ import FirebaseFirestore
 
 final class PostService {
     private let db = Firestore.firestore()
+    private let userService = UserService()
 
     // MARK: - Posts
     func getAllPosts(completion: @escaping ([Post]?, Error?) -> Void) {
-        let db = Firestore.firestore()
         db.collection("posts")
             .getDocuments { snapshot, error in
             if let error = error {
@@ -26,9 +26,9 @@ final class PostService {
 
     // MARK: - Posts with Users
     func getAllPostsWithUsers(completion: @escaping ([PostWithUser]?, Error?) -> Void) {
-        let db = Firestore.firestore()
+        db.collection("posts").getDocuments { [weak self] snapshot, error in
+            guard let self = self else { return }
 
-        db.collection("posts").getDocuments { snapshot, error in
             if let error = error {
                 completion(nil, error)
                 return
@@ -39,19 +39,34 @@ final class PostService {
                 return
             }
 
+            let posts = documents.compactMap { try? $0.data(as: Post.self) }
             var results: [PostWithUser] = []
+            var userCache: [String: User] = [:]
             let group = DispatchGroup()
 
-            for document in documents {
-                if let post = try? document.data(as: Post.self) {
-                    group.enter()
-                    db.collection("users")
-                        .whereField("uid", isEqualTo: post.uid)
-                        .getDocuments { userSnapshot, _ in
-                            let user = try? userSnapshot?.documents.first?.data(as: User.self)
-                            results.append(PostWithUser(post: post, user: user))
-                            group.leave()
-                        }
+            for post in posts {
+                group.enter()
+
+                // Check user cache first
+                if let cachedUser = userCache[post.uid] {
+                    results.append(PostWithUser(post: post, user: cachedUser))
+                    group.leave()
+                    continue
+                }
+
+                // Fetch user via UserService
+                userService.getUser(uid: post.uid) { user, error in
+                    if let error = error {
+                        print("Error fetching user: \(error.localizedDescription)")
+                        results.append(PostWithUser(post: post, user: nil))
+                    }
+
+                    guard let user = user else { return }
+
+                    userCache[post.uid] = user
+                    results.append(PostWithUser(post: post, user: user))
+
+                    group.leave()
                 }
             }
 
@@ -63,7 +78,6 @@ final class PostService {
     }
 
     func savePost(_ post: Post, completion: @escaping (Error?) -> Void) {
-        let db = Firestore.firestore()
         do {
             try db.collection("posts")
                 .addDocument(from: post) { error in
