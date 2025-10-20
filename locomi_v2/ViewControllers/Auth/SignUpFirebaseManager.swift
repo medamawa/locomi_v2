@@ -28,24 +28,10 @@ extension SignUpViewController {
 
     // Set the user information to Firestore after the account is created
     func saveUserToFirestore(user: User) {
-        let db = Firestore.firestore()
-        let collectionUsers = db.collection("users")
-
-        do {
-            try collectionUsers
-                .document(user.uid)
-                .setData(from: user) { error in
-                    DispatchQueue.main.async {
-                        if let error = error {
-                            let errorInfo = error.firestoreErrorInfo
-                            self.showErrorAlert(title: errorInfo.title, message: errorInfo.message)
-                        }
-
-                        // success
-                    }
-                }
-        } catch {
-            self.showErrorAlert(title: "Error encoding user", message: error.localizedDescription)
+        FirestoreManager.shared.userService.saveUser(user) { error in
+            guard let error = error else { return }
+            let errorInfo = error.firestoreErrorInfo
+            self.showErrorAlert(title: errorInfo.title, message: errorInfo.message)
         }
     }
 
