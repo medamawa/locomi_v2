@@ -174,7 +174,10 @@ class PostAnnotationView: MKAnnotationView {
 
             canShowCallout = false
             clusteringIdentifier = Self.clusteringPostIdentifier
-            
+
+            Task {
+                imageViewProfile.image = await postWithUser.user?.loadProfileImage()
+            }
             labelContent.text = postWithUser.post.content
             labelComments.text = "⚪︎ \(postWithUser.post.commentsCount)"
             labelLikes.text = "♡ \(postWithUser.post.likesCount)"
