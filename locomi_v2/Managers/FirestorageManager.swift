@@ -16,7 +16,9 @@ class FirestorageManager {
 
     /// Upload image to Firebase Storage and return its URL
     func uploadImage(_ image: UIImage, folder: String, uid: String, completion: @escaping (Result<URL, Error>) -> Void) {
-        guard let jpegData = image.jpegData(compressionQuality: 0.8) else {
+        // TODO: refactor compressing process
+        let resizedImage = image.resized()
+        guard let jpegData = resizedImage.jpegData(compressionQuality: 0.8) else {
             completion(.failure(NSError(domain: "ImageConversionError", code: -1)))
             return
         }
