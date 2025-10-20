@@ -11,7 +11,7 @@ import FirebaseAuth
 
 class AddPostViewController: UIViewController {
 
-    var coordinator: Coordinator?
+    var coordinator: PostCoordinator?
 
     static let reuseIdentifier = "PostPin"
 

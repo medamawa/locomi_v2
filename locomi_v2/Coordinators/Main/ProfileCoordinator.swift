@@ -37,8 +37,8 @@ class ProfileCoordinator: Coordinator {
         } else {
             profileVC = ProfileViewController()
         }
-
         profileVC.coordinator = self
-        navigationController.setViewControllers([profileVC], animated: true)
+
+        self.navigationController.pushViewController(profileVC, animated: true)
     }
 }

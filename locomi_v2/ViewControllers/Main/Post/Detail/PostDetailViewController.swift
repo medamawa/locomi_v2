@@ -9,6 +9,8 @@ import UIKit
 
 class PostDetailViewController: UIViewController {
 
+    weak var coordinator: PostCoordinator?
+
     var postWithUser: PostWithUser
     var index = 0
     var totalCount = 1
@@ -32,7 +34,14 @@ class PostDetailViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
 
+        setupActions()
         setupPostDetailView()
+    }
+
+    func setupActions() {
+        let tapGestureOnProfileImage = UITapGestureRecognizer(target: self, action: #selector(onProfileImageTapped))
+        postDetailView.imageProfile.isUserInteractionEnabled = true
+        postDetailView.imageProfile.addGestureRecognizer(tapGestureOnProfileImage)
     }
 
     func setupPostDetailView() {
@@ -48,5 +57,12 @@ class PostDetailViewController: UIViewController {
         formatter.locale = Locale(identifier: "en_US")
 
         postDetailView.labelCreatedAt.text = formatter.string(from: date)
+    }
+
+    @objc func onProfileImageTapped() {
+        guard let user = postWithUser.user else { return }
+
+        coordinator?.dismissPostSheet()
+        coordinator?.showProfile(for: user)
     }
 }

@@ -94,10 +94,12 @@ class PostSheetViewController: UIViewController {
     }
 
     func detailVC(for index: Int) -> UIViewController {
-        let vc = PostDetailViewController(postWithUser: postsWithUsers[index])
-        vc.index = index
-        vc.totalCount = postsWithUsers.count
-        return vc
+        let postDetailVC = PostDetailViewController(postWithUser: postsWithUsers[index])
+
+        postDetailVC.coordinator = self.coordinator
+        postDetailVC.index = index
+        postDetailVC.totalCount = postsWithUsers.count
+        return postDetailVC
     }
 
 }

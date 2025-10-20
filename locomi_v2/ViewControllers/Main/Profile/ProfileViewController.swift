@@ -51,6 +51,9 @@ class ProfileViewController: UIViewController {
 
     // MARK: - Setup
     func setupActions() {
+        if let user = self.user {
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(didTapBack))
+        }
         profileView.buttonLogout.addTarget(self, action: #selector(didTapLogOut), for: .touchUpInside)
     }
 
@@ -92,6 +95,10 @@ class ProfileViewController: UIViewController {
     }
 
     // MARK: - Actions
+    @objc func didTapBack() {
+        self.navigationController?.popViewController(animated: true)
+    }
+
     @objc func didTapLogOut() {
         let logoutAlert = UIAlertController(title: "Logging out", message: "Are you sure want to log out?", preferredStyle: .actionSheet)
         logoutAlert.addAction(UIAlertAction(title: "Yes, log out", style: .default, handler: {(_) in

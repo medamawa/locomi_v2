@@ -21,19 +21,16 @@ class MapCoordinator: Coordinator {
         let mapVC = MapViewController()
 
         mapVC.coordinator = self
-        navigationController.setViewControllers([mapVC], animated: true)
+        navigationController.pushViewController(mapVC, animated: true)
     }
 
     func showAddPost(at initialCoordinate: CLLocation) {
-        let addPostVC = AddPostViewController()
+        let postCoordinator = PostCoordinator(navigationController: navigationController)
 
-        addPostVC.coordinator = self
-        addPostVC.postCoordinate = initialCoordinate
+        postCoordinator.parentCoordinator = self
+        childCoordinators.append(postCoordinator)
 
-        let nav = UINavigationController(rootViewController: addPostVC)
-        nav.modalTransitionStyle = .coverVertical
-        nav.modalPresentationStyle = .fullScreen
-        navigationController.present(nav, animated: true)
+        postCoordinator.showAddPost(at: initialCoordinate)
     }
 
     func showPostSheet(of postsWithUsers: [PostWithUser], delegate: UIAdaptivePresentationControllerDelegate?) {

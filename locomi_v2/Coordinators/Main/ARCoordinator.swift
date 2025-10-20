@@ -20,6 +20,6 @@ class ARCoordinator: Coordinator {
         let arVC = ARViewController()
 
         arVC.coordinator = self
-        navigationController.setViewControllers([arVC], animated: true)
+        navigationController.pushViewController(arVC, animated: true)
     }
 }
