@@ -14,7 +14,7 @@ class PostAnnotationView: MKAnnotationView {
 
     var delegate: PostAnnotationViewDelegate?
 
-    var imageButtonProfile: UIButton!
+    var imageViewProfile: UIImageView!
     var bubbleView: UIView!
     var labelContent: UILabel!
     var labelComments: UILabel!
@@ -38,21 +38,17 @@ class PostAnnotationView: MKAnnotationView {
     }
 
     func setupImageViewProfile() {
-        imageButtonProfile = UIButton(type: .system)
+        imageViewProfile = UIImageView()
 
-        imageButtonProfile.setImage(
-            UIImage(systemName: "person.fill")?.withTintColor(.black, renderingMode: .alwaysOriginal)
-            , for: .normal)
-        imageButtonProfile.contentMode = .scaleAspectFill
-        imageButtonProfile.clipsToBounds = true
-        imageButtonProfile.backgroundColor = UIColor.white.withAlphaComponent(0.9)
-        imageButtonProfile.layer.cornerRadius = 20
-        imageButtonProfile.layer.borderWidth = 1
+        imageViewProfile.image = UIImage(systemName: "person.fill")
+        imageViewProfile.contentMode = .scaleAspectFill
+        imageViewProfile.clipsToBounds = true
+        imageViewProfile.backgroundColor = UIColor.white.withAlphaComponent(0.9)
+        imageViewProfile.layer.cornerRadius = 20
+        imageViewProfile.layer.borderWidth = 1
 
-        imageButtonProfile.isEnabled = false
-
-        imageButtonProfile.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(imageButtonProfile)
+        imageViewProfile.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(imageViewProfile)
     }
     func setupBubbleView() {
         bubbleView = UIView()
@@ -146,11 +142,11 @@ class PostAnnotationView: MKAnnotationView {
             labelLikes.bottomAnchor.constraint(equalTo: bubbleView.bottomAnchor, constant: -10),
             labelLikes.leadingAnchor.constraint(equalTo: bubbleView.centerXAnchor, constant: 8),
 
-            // Profile image circular button below bubble
-            imageButtonProfile.topAnchor.constraint(equalTo: bubbleView.bottomAnchor, constant: 5),
-            imageButtonProfile.centerXAnchor.constraint(equalTo: bubbleView.centerXAnchor),
-            imageButtonProfile.widthAnchor.constraint(equalToConstant: 40),
-            imageButtonProfile.heightAnchor.constraint(equalToConstant: 40),
+            // Profile image below bubble
+            imageViewProfile.topAnchor.constraint(equalTo: bubbleView.bottomAnchor, constant: 5),
+            imageViewProfile.centerXAnchor.constraint(equalTo: bubbleView.centerXAnchor),
+            imageViewProfile.widthAnchor.constraint(equalToConstant: 40),
+            imageViewProfile.heightAnchor.constraint(equalToConstant: 40),
         ])
     }
 

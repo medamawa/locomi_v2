@@ -41,8 +41,9 @@ class ProfileView: UIView {
         imageViewProfile.image = UIImage(systemName: "person.circle.fill")
         imageViewProfile.contentMode = .scaleAspectFill
         imageViewProfile.clipsToBounds = true
+        imageViewProfile.backgroundColor = UIColor.white.withAlphaComponent(0.9)
         imageViewProfile.layer.cornerRadius = 50
-        imageViewProfile.tintColor = .systemGray3
+        imageViewProfile.layer.borderWidth = 1
 
         imageViewProfile.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(imageViewProfile)

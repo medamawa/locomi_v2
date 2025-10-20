@@ -39,7 +39,9 @@ class PostDetailView: UIView {
         imageProfile.image = UIImage(systemName: "person.circle")
         imageProfile.contentMode = .scaleAspectFill
         imageProfile.clipsToBounds = true
+        imageProfile.backgroundColor = UIColor.white.withAlphaComponent(0.9)
         imageProfile.layer.cornerRadius = 24
+        imageProfile.layer.borderWidth = 1
 
         imageProfile.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(imageProfile)

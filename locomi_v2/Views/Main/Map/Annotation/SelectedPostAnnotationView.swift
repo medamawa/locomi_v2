@@ -9,11 +9,11 @@ extension PostAnnotationView {
 
     func select() {
         isSelected = true
-        imageButtonProfile.layer.borderWidth = 3
+        imageViewProfile.layer.borderWidth = 3
     }
 
     func deselect() {
         isSelected = false
-        imageButtonProfile.layer.borderWidth = 1
+        imageViewProfile.layer.borderWidth = 1
     }
 }
