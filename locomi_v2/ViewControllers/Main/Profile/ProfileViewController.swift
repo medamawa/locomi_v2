@@ -65,31 +65,18 @@ class ProfileViewController: UIViewController {
     }
 
     func fetchUserInfo(uid: String) {
-        Firestore.firestore()
-            .collection("users")
-            .document(uid)
-            .getDocument { [weak self] (document, error) in
-                guard let self = self else { return }
-
+        FirestoreManager.shared.userService.getUser(uid: uid) { currentUser, error in
+            DispatchQueue.main.async {
                 if let error = error {
-                    print("Error fetching user: \(error.localizedDescription)")
+                    self.showErrorAlert(title: "Failed to fetch user", message: error.localizedDescription)
                     return
                 }
 
-                guard let document = document, document.exists else {
-                    print("User document does not exist")
-                    return
-                }
+                guard let currentUser = currentUser else { return }
 
-                do {
-                    let user: User = try document.data(as: User.self)
-                    DispatchQueue.main.async {
-                        self.configure(with: user)
-                    }
-                } catch {
-                    print("Error decoding user: \(error.localizedDescription)")
-                }
+                self.configure(with: currentUser)
             }
+        }
     }
 
     func configure(with user: User) {

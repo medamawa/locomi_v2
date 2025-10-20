@@ -80,7 +80,7 @@ class MapViewController: UIViewController {
 
     private func loadPostsWithUsers() {
 
-        FirestoreManager.shared.getAllPostsWithUsers { postsWithUsers, error in
+        FirestoreManager.shared.postService.getAllPostsWithUsers { postsWithUsers, error in
             DispatchQueue.main.async {
                 if let error = error {
                     self.showErrorAlert(title: "Failed to fetch posts", message: error.localizedDescription)

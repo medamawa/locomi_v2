@@ -12,7 +12,7 @@ extension AddPostViewController {
     // Set new post to Firestore
     func savePostToFirestore(post: Post) {
 
-        FirestoreManager.shared.savePost(post) { error in
+        FirestoreManager.shared.postService.savePost(post) { error in
             DispatchQueue.main.async {
                 if let error = error {
                     let errorInfo = error.firestoreErrorInfo
