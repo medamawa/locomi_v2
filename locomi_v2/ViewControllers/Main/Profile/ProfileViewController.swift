@@ -51,7 +51,7 @@ class ProfileViewController: UIViewController {
 
     // MARK: - Setup
     func setupActions() {
-        if let user = self.user {
+        if self.user != nil {
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(didTapBack))
         }
         profileView.buttonLogout.addTarget(self, action: #selector(didTapLogOut), for: .touchUpInside)
@@ -83,6 +83,9 @@ class ProfileViewController: UIViewController {
     }
 
     func configure(with user: User) {
+        Task {
+            profileView.imageViewProfile.image = await user.loadProfileImage()
+        }
         profileView.labelName.text = user.displayName
         profileView.labelUsername.text = "@\(user.username)"
         profileView.labelBio.text = user.bio ?? "I'm nothing... :|"
@@ -90,7 +93,8 @@ class ProfileViewController: UIViewController {
         profileView.labelFollowersCount.text = "\(user.followersCount)"
         profileView.labelFollowingCount.text = "\(user.followingCount)"
 
-        // Hide the logout button when viewing another user's profile
+        // Hide some buttons when viewing another user's profile
+        profileView.buttonEditProfile.isHidden = !isCurrentUser
         profileView.buttonLogout.isHidden = !isCurrentUser
     }
 

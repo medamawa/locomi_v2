@@ -45,6 +45,9 @@ class PostDetailViewController: UIViewController {
     }
 
     func setupPostDetailView() {
+        Task {
+            postDetailView.imageProfile.image = await postWithUser.user?.loadProfileImage()
+        }
         postDetailView.labelName.text = postWithUser.user?.displayName
         postDetailView.labelUsername.text = postWithUser.user?.username
         postDetailView.labelContent.text = postWithUser.post.content
