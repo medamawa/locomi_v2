@@ -51,9 +51,7 @@ class ProfileViewController: UIViewController {
 
     // MARK: - Setup
     func setupActions() {
-        if self.user != nil {
-            self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(didTapBack))
-        }
+        profileView.buttonEditProfile.addTarget(self, action: #selector(didTapEditProfile), for: .touchUpInside)
         profileView.buttonLogout.addTarget(self, action: #selector(didTapLogOut), for: .touchUpInside)
     }
 
@@ -77,6 +75,7 @@ class ProfileViewController: UIViewController {
 
                 guard let currentUser = currentUser else { return }
 
+                self.user = currentUser
                 self.configure(with: currentUser)
             }
         }
@@ -93,14 +92,22 @@ class ProfileViewController: UIViewController {
         profileView.labelFollowersCount.text = "\(user.followersCount)"
         profileView.labelFollowingCount.text = "\(user.followingCount)"
 
-        // Hide some buttons when viewing another user's profile
-        profileView.buttonEditProfile.isHidden = !isCurrentUser
-        profileView.buttonLogout.isHidden = !isCurrentUser
+        // Hide buttons and add a cancel button when viewing another user's profile
+        if !isCurrentUser {
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(didTapBack))
+            profileView.buttonEditProfile.isHidden = true
+            profileView.buttonLogout.isHidden = true
+        }
     }
 
     // MARK: - Actions
     @objc func didTapBack() {
         self.navigationController?.popViewController(animated: true)
+    }
+
+    @objc func didTapEditProfile() {
+        guard let user = self.user else { return }
+        self.coordinator?.showEditProfile(for: user)
     }
 
     @objc func didTapLogOut() {

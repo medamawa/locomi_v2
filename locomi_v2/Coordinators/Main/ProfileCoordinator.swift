@@ -41,4 +41,10 @@ class ProfileCoordinator: Coordinator {
 
         self.navigationController.pushViewController(profileVC, animated: true)
     }
+
+    func showEditProfile(for user: User) {
+        let editProfileVC = EditProfileViewController(user: user)
+
+        self.navigationController.pushViewController(editProfileVC, animated: true)
+    }
 }
