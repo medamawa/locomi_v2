@@ -107,7 +107,7 @@ class EditProfileViewController: UIViewController {
         if let profileImage = pickedImage {
             FirestorageManager.shared.uploadImage(profileImage, folder: "imageUsers", uid: self.user.uid) { result in
                 switch result {
-                    case .success(let url):
+                case .success(let url):
                     print("Successfully uploaded image: \(url.absoluteString)")
                     DispatchQueue.main.async {
                         finishSaving(profileImageURL: url)

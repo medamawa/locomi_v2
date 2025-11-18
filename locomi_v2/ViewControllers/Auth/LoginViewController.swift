@@ -20,6 +20,7 @@ class LoginViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = .systemBackground
 
         loginView.buttonLogin.addTarget(self, action: #selector(didTapLoginButton), for: .touchUpInside)
         loginView.buttonSignUp.addTarget(self, action: #selector(didTapSignUpButton), for: .touchUpInside)

@@ -12,7 +12,7 @@ extension SignUpViewController {
 
     // Create a Firebase user with email and password
     func createUser(displayName: String, username: String, email: String, password: String, bio: String?) {
-        Auth.auth().createUser(withEmail: email, password: password, completion: {result, error in
+        Auth.auth().createUser(withEmail: email, password: password, completion: { result, error in
             if error == nil {
                 // MARK: the user creation is successful
                 let user = User(uid: result!.user.uid, displayName: displayName, username: username, email: email, bio: bio)

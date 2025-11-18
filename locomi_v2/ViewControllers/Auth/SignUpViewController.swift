@@ -80,7 +80,7 @@ class SignUpViewController: UIViewController {
          }
 
         if !password.isValidPassword {
-            showErrorAlert(message: "PPassword must be at least 8 characters long and contain uppercase letters, lowercase letters, and numbers")
+            showErrorAlert(message: "Password must be at least 8 characters long and contain uppercase letters, lowercase letters, and numbers")
             return
         }
 
