@@ -40,6 +40,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
+				Libraries/ARCL/Info.plist,
 			);
 			target = CC003B5F2E9593E8003C6EC3 /* locomi_v2 */;
 		};

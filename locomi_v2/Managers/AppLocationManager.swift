@@ -1,5 +1,5 @@
 //
-//  LocationManager.swift
+//  AppLocationManager.swift
 //  locomi_v2
 //
 //  Created by Sogo Nishihara on 2025/10/14.
@@ -8,7 +8,7 @@
 import CoreLocation
 import UIKit
 
-final class LocationManager: NSObject, CLLocationManagerDelegate {
+final class AppLocationManager: NSObject, CLLocationManagerDelegate {
 
     private let manager = CLLocationManager()
     private weak var presentingViewController: UIViewController?

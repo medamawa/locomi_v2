@@ -12,7 +12,7 @@ class MapViewController: UIViewController {
 
     var coordinator: MapCoordinator?
 
-    let locationManager = LocationManager()
+    let locationManager = AppLocationManager()
 
     var mapView = MapView()
     private var postsWithUsers: [PostWithUser] = []
